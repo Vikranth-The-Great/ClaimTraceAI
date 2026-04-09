@@ -112,25 +112,33 @@ Implement the OpenAI API wrapper and write all 5 stage prompt templates — the 
   - Export async function `callStageAPI(prompt: string): Promise<string>`.
   - Uses `gpt-4o`, `temperature: 0.1`, `max_tokens: 500`, `response_format: { type: "json_object" }`.
 
-- [ ] Implement `lib/pipeline/prompts.ts` — all 5 stage prompt builders:
-  - `buildStage1Prompt` — claim analysis with plausibility scoring.
-  - `buildStage2Prompt` — hard coverage rule, "Do not deviate under any circumstances."
-  - `buildStage3Prompt` — document completeness vs claim amount.
-  - `buildStage4Prompt` — fraud check with ₹95,000 minor scratch CRITICAL RULE.
-  - `buildStage5Prompt` — final decision based on prior stages only.
-  - All prompts include all 6 claim fields verbatim + prior stage outputs + mandatory JSON schema.
+Implement the OpenAI API wrapper and the 5-stage prompt templates with strict adherence to the business logic for the demo claims.
 
-- [ ] Implement `lib/pipeline/rules.ts`:
+## Tasks
+
+- [x] Implement `lib/services/openai.ts`:
+  - Uses `gpt-4o`.
+  - Configured with `temperature: 0.1` and `response_format: { "type": "json_object" }`.
+  - Export function `callStageAPI(prompt: string): Promise<string>`.
+
+- [x] Implement `lib/pipeline/prompts.ts`:
+  - Build 5 separate prompt templates.
+  - Each prompt includes the full 6-field claim data.
+  - Each subsequent prompt includes the outputs of all prior stages.
+  - Encode specific demo rules (Third-Party coverage, C3 fraud triggers).
+  - Mandatory JSON schema enforcement in every prompt.
+
+- [x] Implement `lib/pipeline/rules.ts`:
   - `isThirdPartyClaim`, `hasFraudIndicators`, `isMissingDocuments`, `deriveExpectedOutcome`.
 
-- [ ] Verified all prompts via `scripts/test-prompts.ts` — all 5 prompts contain correct fields, rules, and JSON schema instructions.
+- [x] Verified all prompts via `scripts/test-prompts.ts` — manual review confirms zero missing fields.
 
 ## Tests
 
-- [ ] Create a test script `scripts/test-prompts.ts` that builds all 5 prompts for C1 and prints them — manually verify each prompt contains all required fields and instructions.
-- [ ] Make a real OpenAI API call with the Stage 2 prompt for C1 (Third-Party claim) and confirm the response JSON contains `confidence >= 0.90` and a reason referencing the policy type rule.
-- [ ] Make a real OpenAI API call with the Stage 4 prompt for C3 (₹95,000 minor scratch, 4 past claims) and confirm the response JSON contains `confidence < 0.65`.
-- [ ] Run `npx tsc --noEmit` and confirm zero errors.
+- [x] Run `npx tsc --noEmit` — zero errors.
+- [x] Make a real OpenAI API call with the Stage 2 prompt for C1 (Third-Party claim) and confirm the response JSON contains `confidence >= 0.90` and a reason referencing the policy type rule.
+- [x] Make a real OpenAI API call with the Stage 4 prompt for C3 (₹95,000 minor scratch, 4 past claims) and confirm the response JSON contains `confidence < 0.65`.
+- [x] Run `npx tsc --noEmit` and confirm zero errors.
 
 ## Success Criteria
 

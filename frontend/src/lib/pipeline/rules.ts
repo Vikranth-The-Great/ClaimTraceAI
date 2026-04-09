@@ -11,7 +11,7 @@ export function isThirdPartyClaim(claim: ClaimInput): boolean {
  * Checks if a claim involves own damage (simplified for demo).
  * In this demo, all descriptions involve own damage.
  */
-export function involvesOwnDamage(description: string): boolean {
+export function involvesOwnDamage(_description: string): boolean {
   return true; 
 }
 

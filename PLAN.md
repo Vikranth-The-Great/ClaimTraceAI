@@ -298,7 +298,23 @@ The phase is complete when: stage cards reveal one by one as each pipeline stage
 
 ---
 
-# Phase 7 — Batch Results Table & "Run All" Feature
+# Phase 7 — Audit Traceability & Replay ✅ COMPLETE
+
+## Goal
+
+Enable the user to click on any previous claim and "replay" its audit trail. This builds trust by showing the system is consistent across sessions.
+
+## Tasks
+
+- [x] Implement `auditHistory: ClaimResult[]` in `useClaimStore.ts`.
+- [x] Add `persist` middleware to Zustand store for `localStorage` persistence.
+- [x] Implement [AuditLogPage.tsx](file:///c:/Users/vikranth%20subramanyam/Downloads/V3/ClaimTraceAI/frontend/src/pages/AuditLogPage.tsx) to list historical runs.
+- [x] Implement "Replay Audit" mechanism to load historical data into active dashboard.
+- [x] Fix and restore [TopNav.tsx](file:///c:/Users/vikranth%20subramanyam/Downloads/V3/ClaimTraceAI/frontend/src/components/TopNav.tsx) for app-wide navigation.
+
+---
+
+# Phase 8 — Batch Results Table & "Run All" Feature
 
 ## Goal
 
@@ -336,7 +352,7 @@ The phase is complete when: the "Run All 3 Claims" button processes all three de
 
 ---
 
-# Phase 8 — Stage Reveal Animation & UX Polish
+# Phase 9 — Stage Reveal Animation & UX Polish
 
 ## Goal
 
@@ -379,7 +395,7 @@ The phase is complete when: all stage cards animate in one by one with a slide-u
 
 ---
 
-# Phase 9 — Determinism Hardening & Consistency Validation
+# Phase 10 — Determinism Hardening & Consistency Validation
 
 ## Goal
 
@@ -425,7 +441,7 @@ The phase is complete when: C1 produces Rejected on 3/3 runs, C2 produces Approv
 
 ---
 
-# Phase 10 — Final Validation, Cleanup & README
+# Phase 11 — Final Validation, Cleanup & README
 
 ## Goal
 

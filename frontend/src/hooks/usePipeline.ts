@@ -42,7 +42,7 @@ export function usePipeline() {
         priorStages[3].confidence,
       );
 
-      store.setFinalResult({
+      const result = {
         'Claim ID': claim.claimId,
         'Status': finalStatus,
         'Reason': decisionStage.reason,
@@ -50,7 +50,10 @@ export function usePipeline() {
         'Audit Log': priorStages,
         isConsistent: validationResult.isConsistent,
         consistencyIssues: validationResult.issues,
-      });
+      };
+
+      store.setFinalResult(result);
+      store.addToHistory(result);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'An unknown pipeline error occurred.';
       store.setError(message);

@@ -187,7 +187,7 @@ The phase is complete when: all three API routes return correct responses for va
 
 ---
 
-# Phase 5 — Frontend Wiring: Claim Form & Pipeline State ✅ COMPLETE
+# Phase 5: Form & Pipeline Wiring [CORE DASHBOARD] ✅ COMPLETE
 
 ## Goal
 
@@ -195,37 +195,37 @@ Wire the pre-built `/frontend` claim input form to the backend pipeline API. Imp
 
 ## Tasks
 
-- [ ] Implement `store/useClaimStore.ts` (Zustand):
-  - [ ] State: `currentClaim: ClaimInput | null`, `stages: StageOutput[]`, `finalResult: ClaimResult | null`, `isProcessing: boolean`, `processingStageIndex: number` (0–5, which stage is currently in flight), `consistencyWarning: string[] | null`, `batchResults: ClaimResult[]`, `error: string | null`.
-  - [ ] Actions: `setClaim`, `startProcessing`, `appendStage`, `setFinalResult`, `setConsistencyWarning`, `addToBatch`, `resetPipeline`, `setError`.
-  - [ ] Export the store as the default export.
+- [x] Implement `store/useClaimStore.ts` (Zustand):
+  - [x] State: `currentClaim: ClaimInput | null`, `stages: StageOutput[]`, `finalResult: ClaimResult | null`, `isProcessing: boolean`, `processingStageIndex: number` (0–5, which stage is currently in flight), `consistencyWarning: string[] | null`, `batchResults: ClaimResult[]`, `error: string | null`.
+  - [x] Actions: `setClaim`, `startProcessing`, `appendStage`, `setFinalResult`, `setConsistencyWarning`, `addToBatch`, `resetPipeline`, `setError`.
+  - [x] Export the store as the default export.
 
-- [ ] Implement `hooks/usePipeline.ts`:
-  - [ ] Export `usePipeline()` hook.
-  - [ ] Exposes `processClaim(claim: ClaimInput): Promise<void>` — calls `/api/stage` once per stage in a loop, calling `store.appendStage(stageOutput)` and incrementing `processingStageIndex` after each.
-  - [ ] On completion: calls `/api/validate`, sets `consistencyWarning` if issues found, calls `store.setFinalResult`.
-  - [ ] On error: calls `store.setError(message)`.
+- [x] Implement `hooks/usePipeline.ts`:
+  - [x] Export `usePipeline()` hook.
+  - [x] Exposes `processClaim(claim: ClaimInput): Promise<void>` — calls `/api/stage` once per stage in a loop, calling `store.appendStage(stageOutput)` and incrementing `processingStageIndex` after each.
+  - [x] On completion: calls `/api/validate`, sets `consistencyWarning` if issues found, calls `store.setFinalResult`.
+  - [x] On error: calls `store.setError(message)`.
 
-- [ ] Implement `hooks/useClipboard.ts`:
-  - [ ] Export `useClipboard()` hook with `copyText(text: string): Promise<void>` and `isCopied: boolean` state (resets after 2 seconds).
+- [x] Implement `hooks/useClipboard.ts`:
+  - [x] Export `useClipboard()` hook with `copyText(text: string): Promise<void>` and `isCopied: boolean` state (resets after 2 seconds).
 
-- [ ] Wire `components/claim/DemoSelector.tsx` to `store.setClaim(DEMO_CLAIMS["C1"])` etc. on button click.
-- [ ] Wire `components/claim/ClaimForm.tsx`:
-  - [ ] Bind all 6 input fields to local form state.
-  - [ ] "Process Claim" button calls `usePipeline().processClaim(formValues)`.
-  - [ ] Disable the button and show a loading state while `store.isProcessing` is true.
-  - [ ] Validate all fields are non-empty before allowing submission. Show inline validation errors if a field is blank.
-  - [ ] "Run All" button processes C1, C2, C3 sequentially and calls `store.addToBatch` for each result.
+- [x] Wire `components/claim/DemoSelector.tsx` to `store.setClaim(DEMO_CLAIMS["C1"])` etc. on button click.
+- [x] Wire `components/claim/ClaimForm.tsx`:
+  - [x] Bind all 6 input fields to local form state.
+  - [x] "Process Claim" button calls `usePipeline().processClaim(formValues)`.
+  - [x] Disable the button and show a loading state while `store.isProcessing` is true.
+  - [x] Validate all fields are non-empty before allowing submission. Show inline validation errors if a field is blank.
+  - [x] "Run All" button processes C1, C2, C3 sequentially and calls `store.addToBatch` for each result.
 
 ## Tests
 
-- [ ] Open `http://localhost:3000` in the browser.
-- [ ] Click "Load C1" button — confirm all 6 form fields are auto-populated with C1 data.
-- [ ] Click "Process Claim" — confirm the "Process Claim" button becomes disabled and shows a loading indicator.
-- [ ] Check the browser Network tab — confirm a request is made to `/api/stage` with `stageNumber: 1` and the C1 claim data.
-- [ ] Confirm the Zustand store updates — `stages` array grows as each stage API call completes.
-- [ ] Confirm no browser console errors during the form submission flow.
-- [ ] Try submitting the form with an empty field — confirm an inline validation error appears and the API is NOT called.
+- [x] Open `http://localhost:3000` in the browser.
+- [x] Click "Load C1" button — confirm all 6 form fields are auto-populated with C1 data.
+- [x] Click "Process Claim" — confirm the "Process Claim" button becomes disabled and shows a loading indicator.
+- [x] Check the browser Network tab — confirm a request is made to `/api/stage` with `stageNumber: 1` and the C1 claim data.
+- [x] Confirm the Zustand store updates — `stages` array grows as each stage API call completes.
+- [x] Confirm no browser console errors during the form submission flow.
+- [x] Try submitting the form with an empty field — confirm an inline validation error appears and the API is NOT called.
 
 ## Success Criteria
 
@@ -241,39 +241,39 @@ Wire the pipeline state to the visual output components — stage cards, decisio
 
 ## Tasks
 
-- [ ] Wire `components/pipeline/StageCard.tsx` to Zustand state:
-  - Render one `StageCard` for each entry in `store.stages`.
-  - While `store.processingStageIndex === stageIndex` (current stage in flight): render `StageSkeleton.tsx` (shimmer loading state) for that card position.
-  - Once stage data is available: render the card with step name, reasoning text, confidence badge, and source label.
-  - Cards must appear one at a time in sequence — do not render all 5 placeholders upfront.
+- [x] Wire `components/pipeline/StageCard.tsx` to Zustand state:
+  - [x] Render one `StageCard` for each entry in `store.stages`.
+  - [x] While `store.processingStageIndex === stageIndex` (current stage in flight): render `StageSkeleton.tsx` (shimmer loading state) for that card position.
+  - [x] Once stage data is available: render the card with step name, reasoning text, confidence badge, and source label.
+  - [x] Cards must appear one at a time in sequence — do not render all 5 placeholders upfront.
 
-- [ ] Wire `components/pipeline/StageSkeleton.tsx`:
-  - Render a shimmer placeholder: title bar (60% width), two content lines (100% and 75% width), small badge placeholder.
-  - Use a CSS animation (`animations.css`) for the shimmer effect.
+- [x] Wire `components/pipeline/StageSkeleton.tsx`:
+  - [x] Render a shimmer placeholder: title bar (60% width), two content lines (100% and 75% width), small badge placeholder.
+  - [x] Use a CSS animation (`animations.css`) for the shimmer effect.
 
-- [ ] Wire `components/result/ConfidenceBadge.tsx`:
-  - Accept `confidence: number` as a prop.
-  - Render: `confidence >= 0.80` → green background + "High" text, `0.65 <= confidence < 0.80` → amber + "Medium", `confidence < 0.65` → red + "Low".
-  - Always display both the colour AND the text label (not colour alone — accessibility requirement).
-  - Display the numeric score alongside the band label: e.g., "High (0.92)".
+- [x] Wire `components/result/ConfidenceBadge.tsx`:
+  - [x] Accept `confidence: number` as a prop.
+  - [x] Render: `confidence >= 0.80` → green background + "High" text, `0.65 <= confidence < 0.80` → amber + "Medium", `confidence < 0.65` → red + "Low".
+  - [x] Always display both the colour AND the text label (not colour alone — accessibility requirement).
+  - [x] Display the numeric score alongside the band label: e.g., "High (0.92)".
 
-- [ ] Wire `components/result/DecisionBanner.tsx` to `store.finalResult`:
-  - Do not render the banner until `store.finalResult` is set.
-  - Approved → green background, "✓ APPROVED" heading.
-  - Rejected → red background, "✗ REJECTED" heading.
-  - Pending → amber background, "⚠ PENDING — Human Review Required" heading.
-  - Display `store.finalResult.reason` and `store.finalResult.confidenceScore`.
-  - If `store.consistencyWarning` is not null: render a yellow warning banner above the decision banner listing the issues.
+- [x] Wire `components/result/DecisionBanner.tsx` to `store.finalResult`:
+  - [x] Do not render the banner until `store.finalResult` is set.
+  - [x] Approved → green background, "✓ APPROVED" heading.
+  - [x] Rejected → red background, "✗ REJECTED" heading.
+  - [x] Pending → amber background, "⚠ PENDING — Human Review Required" heading.
+  - [x] Display `store.finalResult.reason` and `store.finalResult.confidenceScore`.
+  - [x] If `store.consistencyWarning` is not null: render a yellow warning banner above the decision banner listing the issues.
 
-- [ ] Wire `components/result/AuditLogPanel.tsx` to `store.finalResult.auditLog`:
-  - Do not render until `store.finalResult` is set.
-  - Display the full `ClaimResult` JSON (assembled via `buildFinalOutput`) in a `<pre>` code block with syntax highlighting (use a simple className-based highlighter or the `json-pretty` approach with inline styles).
-  - "Copy JSON" button calls `useClipboard().copyText(JSON.stringify(finalResult, null, 2))`. Button label changes to "Copied ✓" for 2 seconds after click.
-  - "Export JSON" button triggers `URL.createObjectURL(new Blob([JSON.stringify(finalResult, null, 2)], { type: 'application/json' }))` and downloads as `claim-{claimId}-audit.json`.
+- [x] Wire `components/result/AuditLogPanel.tsx` to `store.finalResult.auditLog`:
+  - [x] Do not render until `store.finalResult` is set.
+  - [x] Display the full `ClaimResult` JSON (assembled via `buildFinalOutput`) in a `<pre>` code block with syntax highlighting (use a simple className-based highlighter or the `json-pretty` approach with inline styles).
+  - [x] "Copy JSON" button calls `useClipboard().copyText(JSON.stringify(finalResult, null, 2))`. Button label changes to "Copied ✓" for 2 seconds after click.
+  - [x] "Export JSON" button triggers `URL.createObjectURL(new Blob([JSON.stringify(finalResult, null, 2)], { type: 'application/json' }))` and downloads as `claim-{claimId}-audit.json`.
 
-- [ ] Wire `components/result/ConfidenceLegend.tsx`:
-  - Static component. Displays three rows: green circle + "High ≥ 0.80", amber circle + "Medium 0.65–0.79", red circle + "Low < 0.65".
-  - Always visible on the results side of the layout (not hidden until results appear).
+- [x] Wire `components/result/ConfidenceLegend.tsx`:
+  - [x] Static component. Displays three rows: green circle + "High ≥ 0.80", amber circle + "Medium 0.65–0.79", red circle + "Low < 0.65".
+  - [x] Always visible on the results side of the layout (not hidden until results appear).
 
 - [ ] Wire `components/pipeline/ProgressIndicator.tsx`:
   - Displays a horizontal step bar with 5 steps labelled with stage names.

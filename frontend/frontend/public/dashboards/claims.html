@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ClaimTrace AI - Professional Insurance Audit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#1A56DB",
+                        surface: "#F9FAFB",
+                        border: "#E5E7EB",
+                        "text-label": "#6B7280",
+                        "approved-bg": "#F0FDF4",
+                        "approved-text": "#065F46",
+                        "rejected-bg": "#FEF2F2",
+                        "rejected-text": "#991B1B",
+                        "pending-bg": "#FFFBEB",
+                        "pending-text": "#92400E"
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                        mono: ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "4px",
+                        "card": "8px"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #F9FAFB; }
+        .audit-border { border: 0.5px solid #E5E7EB; }
+        .shimmer {
+            background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-surface text-[#111827] antialiased overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full h-[64px] z-50 bg-white border-b border-border flex justify-between items-center px-6">
+<div class="flex items-baseline gap-4">
+<span class="text-lg font-extrabold tracking-tight uppercase">ClaimTrace AI</span>
+<span class="text-xs font-medium text-text-label tracking-wide">Explainable Insurance Decisions</span>
+</div>
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex gap-8 items-center h-full">
+<a class="text-[#111827] font-semibold border-b-2 border-primary pb-5 pt-5 text-sm" href="/#/claims" target="_top">Claims</a>
+<a class="text-text-label hover:text-[#111827] transition-colors text-sm" href="/#/audit-log" target="_top">Audit Log</a>
+<a class="text-text-label hover:text-[#111827] transition-colors text-sm" href="/#/batch" target="_top">Batch</a>
+<a class="text-text-label hover:text-[#111827] transition-colors text-sm" href="/#/system" target="_top">System</a>
+</nav>
+<div class="h-8 w-px bg-border"></div>
+<div class="flex items-center gap-4">
+<div class="bg-blue-50 text-primary px-3 py-1 rounded-full text-xs font-bold border border-blue-100">
+                Claim Counter: 124
+            </div>
+<img alt="Auditor Profile" class="w-8 h-8 rounded-full border border-border object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCM7H0zFi7ZyZFJ-0lQ6Y5ngegXmt389L18zYZLibUlrvfeAMTq0D2rTO8e-syrneVdK8hjZVzjIzUMWfKQodBKnQdDNOijFgFd7PwSCxuyDjZueSE6t7Ucw5V3CwbecNA3nE8gfQdNWcjpulQAwh-TtMjrNjdU_tWsWkyyKp5JEhNsp31GO7yHdr_E4NK3JUsu-zTnk2HKdOpG8xqW8WWKrT6Hu4aWu9A1tG4LYUG_HC1m4qYH6QH2Hr1xzgVEUXQ3xoMjA5qvxNhC"/>
+</div>
+</div>
+</header>
+<main class="flex h-screen pt-[64px]">
+<!-- Left Column: Input Panel -->
+<aside class="w-[380px] bg-white border-r border-border flex flex-col h-full overflow-y-auto shrink-0">
+<div class="p-6">
+<div class="mb-8">
+<h2 class="text-xs uppercase tracking-widest font-bold text-text-label mb-1">Claim Details</h2>
+<p class="text-[11px] text-text-label/70">Audit Entry Reference: AC-9921-X</p>
+</div>
+<div class="space-y-4">
+<div>
+<label class="block text-[13px] font-medium text-text-label mb-1.5">Claim ID</label>
+<input class="w-full bg-surface border-border rounded-[4px] text-[14px] px-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" type="text" value="CLM-77293-HB"/>
+</div>
+<div>
+<label class="block text-[13px] font-medium text-text-label mb-1.5">Accident Description</label>
+<textarea class="w-full bg-surface border-border rounded-[4px] text-[14px] px-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all resize-none" rows="3">Rear-end collision at intersection. Vehicle A slowed for yellow light, Vehicle B failed to maintain distance.</textarea>
+</div>
+<div>
+<label class="block text-[13px] font-medium text-text-label mb-1.5">Policy Type</label>
+<select class="w-full bg-surface border-border rounded-[4px] text-[14px] px-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option>Comprehensive</option>
+<option>Third-Party</option>
+</select>
+</div>
+<div>
+<label class="block text-[13px] font-medium text-text-label mb-1.5">Claim Amount</label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-[14px] text-text-label">₹</span>
+<input class="w-full bg-surface border-border rounded-[4px] text-[14px] pl-7 pr-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" type="number" value="145000"/>
+</div>
+</div>
+<div>
+<label class="block text-[13px] font-medium text-text-label mb-1.5">Past Claims</label>
+<input class="w-full bg-surface border-border rounded-[4px] text-[14px] px-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all" type="number" value="0"/>
+</div>
+<div>
+<label class="block text-[13px] font-medium text-text-label mb-1.5">Document Status</label>
+<select class="w-full bg-surface border-border rounded-[4px] text-[14px] px-3 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none">
+<option>Verified</option>
+<option>Incomplete</option>
+</select>
+</div>
+<div class="pt-6 border-t border-border">
+<label class="block text-xs font-bold text-text-label uppercase tracking-wider mb-3">Batch Candidates</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-1.5 text-xs rounded-full bg-white border border-border text-text-label font-medium hover:border-gray-300 transition-all">C1</button>
+<button class="px-4 py-1.5 text-xs rounded-full bg-primary text-white font-bold">C2</button>
+<button class="px-4 py-1.5 text-xs rounded-full bg-white border border-border text-text-label font-medium hover:border-gray-300 transition-all">C3</button>
+</div>
+</div>
+<div class="pt-8 space-y-3">
+<button class="w-full bg-primary text-white h-[44px] rounded-[4px] font-bold text-sm tracking-tight hover:bg-blue-700 transition-all">
+                        Process Claim
+                    </button>
+<button class="w-full bg-transparent border border-border text-text-label h-[44px] rounded-[4px] font-semibold text-sm hover:bg-surface transition-all">
+                        Run All 3
+                    </button>
+</div>
+</div>
+</div>
+</aside>
+<!-- Right Column: Audit Engine -->
+<div class="flex-1 overflow-y-auto flex flex-col bg-surface">
+<div class="p-8 w-full max-w-5xl mx-auto flex-1 pb-16">
+<!-- Confidence Legend -->
+<div class="flex justify-end items-center gap-6 mb-8">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+<span class="text-[11px] font-semibold text-text-label uppercase">High ≥0.80</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+<span class="text-[11px] font-semibold text-text-label uppercase">Medium 0.65–0.79</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+<span class="text-[11px] font-semibold text-text-label uppercase">Low &lt;0.65</span>
+</div>
+</div>
+<!-- Audit Pipeline -->
+<div class="space-y-3">
+<!-- Stage 1 -->
+<div class="bg-white audit-border rounded-card p-4 flex items-center gap-6">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">1</div>
+<div class="flex-1">
+<h3 class="text-[14px] font-bold">Claim Analysis</h3>
+<p class="text-[13px] text-[#374151]">Initial parsing of accident description confirms a clear liability trajectory involving two vehicles at a signalized intersection. No conflicting statements or external impact variables were identified in the primary submission.</p>
+<p class="text-[12px] text-text-label italic mt-1">Source: Description input</p>
+</div>
+<div class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold border border-emerald-100 shrink-0">0.96 Confidence</div>
+</div>
+<!-- Stage 2 -->
+<div class="bg-white audit-border rounded-card p-4 flex items-center gap-6">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">2</div>
+<div class="flex-1">
+<h3 class="text-[14px] font-bold">Coverage Validation</h3>
+<p class="text-[13px] text-[#374151]">Comprehensive policy status is confirmed active for the duration of the incident date with all premium payments current. The accidental damage sub-limit exceeds the requested claim amount by 45%.</p>
+<p class="text-[12px] text-text-label italic mt-1">Source: Policy Type rule</p>
+</div>
+<div class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold border border-emerald-100 shrink-0">0.98 Confidence</div>
+</div>
+<!-- Stage 3 -->
+<div class="bg-white audit-border rounded-card p-4 flex items-center gap-6">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">3</div>
+<div class="flex-1">
+<h3 class="text-[14px] font-bold">Document Validation</h3>
+<p class="text-[13px] text-[#374151]">Submitted photographic evidence and repair estimates have been cross-verified against the service center's digital signature. Mandatory identity documentation is present and matches the policy holder's registered details.</p>
+<p class="text-[12px] text-text-label italic mt-1">Source: Document Status input</p>
+</div>
+<div class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold border border-emerald-100 shrink-0">0.92 Confidence</div>
+</div>
+<!-- Stage 4 (Loading) -->
+<div class="bg-white audit-border rounded-card p-4 flex items-center gap-6">
+<div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shrink-0">4</div>
+<div class="flex-1 flex flex-col gap-2.5">
+<h3 class="text-[14px] font-bold">Fraud / Consistency Check</h3>
+<div class="space-y-2">
+<div class="h-3 w-[60%] shimmer rounded"></div>
+<div class="h-3 w-[80%] shimmer rounded"></div>
+<div class="h-3 w-[40%] shimmer rounded"></div>
+</div>
+<p class="text-[12px] text-text-label italic mt-1">Source: Past Claims + Claim Amount</p>
+</div>
+<div class="h-6 w-24 bg-gray-50 rounded-full animate-pulse border border-gray-100"></div>
+</div>
+<!-- Stage 5 (Faded) -->
+<div class="bg-white audit-border rounded-card p-4 flex items-center gap-6 opacity-40 grayscale">
+<div class="w-8 h-8 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center font-bold text-sm shrink-0">5</div>
+<div class="flex-1">
+<h3 class="text-[14px] font-bold text-gray-600">Decision Generation</h3>
+<p class="text-[13px] text-gray-500">Awaiting final weighted aggregation of audit outputs to determine settlement eligibility and payout structure.</p>
+<p class="text-[12px] text-text-label italic mt-1">Source: Aggregated stage outputs</p>
+</div>
+</div>
+</div>
+<!-- Decision Banner -->
+<div class="mt-8 bg-approved-bg border border-emerald-200/50 rounded-card px-8 py-5 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-approved-text font-bold text-3xl">check_circle</span>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-extrabold text-approved-text tracking-widest uppercase block">✓ APPROVED</span>
+</div>
+<span class="text-xs text-approved-text/80 font-medium">Primary Factor: No risk factors identified in damage assessment or policy history.</span>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="text-right">
+<span class="text-[10px] text-approved-text/60 font-bold uppercase block leading-none mb-1">Overall Confidence</span>
+<span class="text-[32px] font-black text-approved-text leading-none">94%</span>
+</div>
+<button class="bg-approved-text text-white px-8 py-3 rounded-[4px] text-xs font-bold uppercase tracking-widest hover:opacity-90 transition-all">
+                        Finalize Audit
+                    </button>
+</div>
+</div>
+<!-- JSON Audit Log -->
+<div class="mt-8 rounded-card overflow-hidden border border-gray-800">
+<div class="bg-[#1F2937] text-[#E5E7EB] px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-gray-800 transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-sm">code</span>
+<span class="text-xs font-bold font-mono tracking-wider uppercase">Audit Log (JSON)</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="flex items-center gap-1.5 text-[10px] font-bold uppercase bg-white/10 hover:bg-white/20 px-2 py-1 rounded transition-colors">
+<span class="material-symbols-outlined text-[14px]">content_copy</span> Copy
+                        </button>
+<span class="material-symbols-outlined text-sm">keyboard_arrow_up</span>
+</div>
+</div>
+<div class="p-6 font-mono text-[11px] leading-relaxed overflow-x-auto h-32 bg-[#111827]">
+<pre class="text-emerald-400">{
+  "audit_id": "AT-X902",
+  "status": "success",
+  "timestamp": "2023-11-20T14:42:01Z",
+  "decision_vector": [0.96, 0.98, 0.92, null, null],
+  "explainability": {
+    "primary_factor": "policy_tenure_match",
+    "secondary_factor": "geospatial_proximity_verified"
+  },
+  "raw_payload": "https://api.claimtrace.ai/v1/claims/HB-77293"
+}</pre>
+</div>
+</div>
+<!-- Batch Results Table -->
+<div class="mt-12">
+<h2 class="text-xs uppercase tracking-widest font-bold text-text-label mb-4">Batch Processing Results</h2>
+<div class="bg-white audit-border rounded-card overflow-hidden">
+<table class="w-full text-left text-sm">
+<thead class="bg-surface border-b border-border">
+<tr>
+<th class="px-6 py-3 font-bold text-text-label">Claim ID</th>
+<th class="px-6 py-3 font-bold text-text-label">Status</th>
+<th class="px-6 py-3 font-bold text-text-label">Confidence</th>
+<th class="px-6 py-3 font-bold text-text-label">Key Reason</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border">
+<tr>
+<td class="px-6 py-4 font-medium">CLM-77293-HB</td>
+<td class="px-6 py-4"><span class="bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full text-xs font-bold border border-emerald-100 uppercase">Approved</span></td>
+<td class="px-6 py-4">0.92 · <span class="text-emerald-600 font-bold">High</span></td>
+<td class="px-6 py-4 text-text-label">Full policy match &amp; damage verified</td>
+</tr>
+<tr>
+<td class="px-6 py-4 font-medium">CLM-77301-JX</td>
+<td class="px-6 py-4"><span class="bg-red-50 text-red-700 px-2.5 py-0.5 rounded-full text-xs font-bold border border-red-100 uppercase">Rejected</span></td>
+<td class="px-6 py-4">0.98 · <span class="text-emerald-600 font-bold">High</span></td>
+<td class="px-6 py-4 text-text-label">Lapsed coverage period</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

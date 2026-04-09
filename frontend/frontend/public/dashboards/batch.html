@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Batch Analytics Dashboard | ClaimTrace AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#f8f9fa",
+                    "secondary-fixed": "#81f9c1",
+                    "primary-container": "#dce2f7",
+                    "primary": "#575e70",
+                    "on-primary": "#f7f7ff",
+                    "error-container": "#fe8983",
+                    "outline": "#737c7f",
+                    "inverse-primary": "#d9dff5",
+                    "secondary-fixed-dim": "#72ebb3",
+                    "error": "#9f403d",
+                    "on-surface-variant": "#586064",
+                    "tertiary-fixed-dim": "#ed871e",
+                    "error-dim": "#4e0309",
+                    "tertiary": "#914d00",
+                    "on-primary-fixed": "#383f50",
+                    "surface-container": "#eaeff1",
+                    "on-primary-fixed-variant": "#545b6d",
+                    "secondary": "#006d4a",
+                    "on-primary-container": "#4b5263",
+                    "on-tertiary-fixed-variant": "#572c00",
+                    "surface-container-high": "#e2e9ec",
+                    "on-tertiary-fixed": "#240f00",
+                    "tertiary-container": "#fe932c",
+                    "primary-dim": "#4b5264",
+                    "on-secondary-fixed-variant": "#006947",
+                    "on-error": "#fff7f6",
+                    "background": "#f8f9fa",
+                    "on-secondary": "#e6ffee",
+                    "on-error-container": "#752121",
+                    "inverse-on-surface": "#9b9d9e",
+                    "surface-variant": "#dbe4e7",
+                    "on-secondary-fixed": "#004930",
+                    "on-surface": "#2b3437",
+                    "primary-fixed": "#dce2f7",
+                    "tertiary-fixed": "#fe932c",
+                    "on-tertiary-container": "#4a2500",
+                    "inverse-surface": "#0c0f10",
+                    "on-surface": "#2b3437",
+                    "surface-container-low": "#f1f4f6",
+                    "secondary-container": "#81f9c1",
+                    "surface-tint": "#575e70",
+                    "secondary-dim": "#005f40",
+                    "primary-fixed-dim": "#ced4e9",
+                    "on-tertiary": "#fff7f4",
+                    "surface": "#f8f9fa",
+                    "surface-dim": "#d1dce0",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#abb3b7",
+                    "tertiary-dim": "#804300",
+                    "surface-container-highest": "#dbe4e7",
+                    "on-secondary-container": "#005e3f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ghost-border { border: 0.5px solid rgba(171, 179, 183, 0.15); }
+        .soft-shadow { box-shadow: 0 12px 24px -4px rgba(43, 52, 55, 0.06); }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased">
+<!-- TopNavBar -->
+<nav class="bg-white dark:bg-gray-950 flex justify-between items-center w-full px-6 h-16 docked full-width top-0 border-b border-surface-container">
+<div class="flex items-center space-x-8">
+<div class="flex flex-col">
+<span class="text-xl font-bold tracking-tighter text-gray-900 dark:text-white">ClaimTrace AI</span>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-medium">Explainable Insurance Decisions</span>
+</div>
+<div class="hidden md:flex space-x-6 h-16 items-center">
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-sans text-sm tracking-tight transition-colors duration-150" href="/#/claims" target="_top">Claims</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-sans text-sm tracking-tight transition-colors duration-150" href="/#/audit-log" target="_top">Audit Log</a>
+<a class="text-gray-900 dark:text-white font-semibold border-b-2 border-gray-900 dark:border-white pb-1 font-sans text-sm tracking-tight" href="/#/batch" target="_top">Batch</a>
+<a class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-sans text-sm tracking-tight transition-colors duration-150" href="/#/system" target="_top">System</a>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<div class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-xs font-bold tracking-tight">
+                24 Active Claims
+            </div>
+<button class="material-symbols-outlined p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 rounded-full text-on-surface-variant">notifications</button>
+<button class="material-symbols-outlined p-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150 rounded-full text-on-surface-variant">account_circle</button>
+</div>
+</nav>
+<main class="max-w-[1440px] mx-auto p-8 space-y-8">
+<!-- Header & Confidence Legend -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-headline-sm font-medium text-on-surface">Batch Analytics Overview</h1>
+<p class="text-label-sm text-on-surface-variant mt-1">Real-time clinical audit distribution for Batch ID: #B-2023-892</p>
+</div>
+<div class="flex items-center space-x-6 bg-surface-container-low p-4 rounded-xl ghost-border">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-label-sm font-medium">High ≥ 0.80</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-label-sm font-medium">Medium 0.65 - 0.79</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-label-sm font-medium">Low &lt; 0.65</span>
+</div>
+</div>
+</div>
+<!-- Row 1: Summary Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow">
+<p class="text-label-sm font-medium text-on-surface-variant mb-2">Total Claims Processed</p>
+<div class="flex items-baseline space-x-2">
+<span class="text-3xl font-bold text-on-surface">24</span>
+<span class="text-xs text-on-surface-variant">Live Batch</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow border-l-4 border-l-secondary">
+<p class="text-label-sm font-medium text-on-surface-variant mb-2">Approved Claims</p>
+<div class="flex items-baseline space-x-2">
+<span class="text-3xl font-bold text-on-surface">18</span>
+<span class="text-xs font-semibold text-secondary">75%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow border-l-4 border-l-error">
+<p class="text-label-sm font-medium text-on-surface-variant mb-2">Rejected Claims</p>
+<div class="flex items-baseline space-x-2">
+<span class="text-3xl font-bold text-on-surface">4</span>
+<span class="text-xs font-semibold text-error">16%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow border-l-4 border-l-tertiary">
+<p class="text-label-sm font-medium text-on-surface-variant mb-2">Pending Claims</p>
+<div class="flex items-baseline space-x-2">
+<span class="text-3xl font-bold text-on-surface">2</span>
+<span class="text-xs font-semibold text-tertiary">9%</span>
+</div>
+</div>
+</div>
+<!-- Row 2: Visual Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Donut: Status Distribution -->
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow flex flex-col">
+<h3 class="text-title-sm font-medium text-on-surface mb-6">Status Distribution</h3>
+<div class="relative w-48 h-48 mx-auto flex items-center justify-center mb-6">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#F1F4F6" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#006D4A" stroke-dasharray="75 100" stroke-dashoffset="0" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#9F403D" stroke-dasharray="16 100" stroke-dashoffset="-75" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="transparent" r="15.9" stroke="#914D00" stroke-dasharray="9 100" stroke-dashoffset="-91" stroke-width="3"></circle>
+</svg>
+<div class="absolute flex flex-col items-center">
+<span class="text-xl font-bold text-on-surface">24</span>
+<span class="text-[10px] text-on-surface-variant uppercase">Total</span>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-2 mt-auto">
+<div class="text-center">
+<div class="text-[10px] font-bold text-secondary uppercase mb-1">Apprv</div>
+<div class="text-sm font-semibold">18</div>
+</div>
+<div class="text-center">
+<div class="text-[10px] font-bold text-error uppercase mb-1">Rejt</div>
+<div class="text-sm font-semibold">4</div>
+</div>
+<div class="text-center">
+<div class="text-[10px] font-bold text-tertiary uppercase mb-1">Pend</div>
+<div class="text-sm font-semibold">2</div>
+</div>
+</div>
+</div>
+<!-- Bar: Confidence Distribution -->
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow">
+<h3 class="text-title-sm font-medium text-on-surface mb-6">Confidence Distribution</h3>
+<div class="flex items-end justify-between h-48 px-4 border-b border-outline-variant/20">
+<div class="flex flex-col items-center w-12 space-y-2">
+<div class="w-full bg-secondary rounded-t-lg" style="height: 140px;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">High</span>
+</div>
+<div class="flex flex-col items-center w-12 space-y-2">
+<div class="w-full bg-tertiary rounded-t-lg" style="height: 60px;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Med</span>
+</div>
+<div class="flex flex-col items-center w-12 space-y-2">
+<div class="w-full bg-error rounded-t-lg" style="height: 30px;"></div>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase">Low</span>
+</div>
+</div>
+<div class="mt-4 flex justify-between text-xs text-on-surface-variant px-2">
+<span>14 Claims</span>
+<span>6 Claims</span>
+<span>4 Claims</span>
+</div>
+</div>
+<!-- Horizontal Bar: Stage Failure Analysis -->
+<div class="bg-surface-container-lowest p-6 rounded-xl ghost-border soft-shadow">
+<h3 class="text-title-sm font-medium text-on-surface mb-6">Stage Failure Analysis</h3>
+<div class="space-y-5">
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-on-surface">Claim Analysis</span>
+<span class="text-on-surface-variant">0 Failures</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-secondary h-full rounded-full" style="width: 100%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-on-surface">Coverage Validation</span>
+<span class="text-on-surface-variant">2 Failures</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-tertiary h-full rounded-full" style="width: 30%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-on-surface">Document Validation</span>
+<span class="text-on-surface-variant">4 Failures</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-error h-full rounded-full" style="width: 60%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="font-medium text-on-surface">Fraud Flags</span>
+<span class="text-on-surface-variant">1 Flag</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-error h-full rounded-full" style="width: 15%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Insights & Batch Table -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left: Key Insights -->
+<div class="lg:col-span-4 space-y-4">
+<h3 class="text-title-sm font-medium text-on-surface">Key Audit Insights</h3>
+<div class="bg-surface-container-lowest p-4 rounded-xl ghost-border hover:translate-x-1 transition-transform duration-200 cursor-default">
+<div class="flex items-start space-x-3">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Automated Pass Rate High</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">75% of claims met all clinical rules without manual override requirements.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl ghost-border hover:translate-x-1 transition-transform duration-200 cursor-default">
+<div class="flex items-start space-x-3">
+<span class="material-symbols-outlined text-error">warning</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Document Mismatch Trend</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">4 claims flagged for missing ICD-10 code synchronization in uploaded PDFs.</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-xl ghost-border hover:translate-x-1 transition-transform duration-200 cursor-default">
+<div class="flex items-start space-x-3">
+<span class="material-symbols-outlined text-tertiary">info</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Confidence Outliers</p>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">Coverage validation for Batch #892 is showing 15% lower confidence than historical mean.</p>
+</div>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl h-32 ghost-border">
+<img alt="abstract visualization of insurance data flowing through neural networks in clinical white and teal colors" class="w-full h-full object-cover opacity-60" data-alt="abstract visualization of insurance data flowing through neural networks in clinical white and teal colors with digital grain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCEg92mYg6oycS4ES35pSu9SIuNKxl3QCKqEArnfG-kuLsT4ZysGtUCZChxuIM9pcJBuThNu1yPXWZjb_IooJBNZ9IUmkiK_SWLoa-uERSixUpKJCgTY-rwqpv5z1eC8bKfg2_BmQay_jfa5-zkeryqd7w0ToO1bmcZOFwIFm0OhEy4Hx-s_iEtDh519ZG2ykr2YlDeot4BAFYIAr7Fa3vaXNAG5Z6z4RQuvnQfkXp0fzkF0-DxmNyQQ5KpKkyJaRYR9iQ07ZLsXGy"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent flex items-end p-4">
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Diagnostic Visualizer Active</span>
+</div>
+</div>
+</div>
+<!-- Right: Batch Results Table -->
+<div class="lg:col-span-8 flex flex-col space-y-4">
+<div class="flex justify-between items-center bg-surface-container-low p-3 rounded-lg ghost-border">
+<div class="flex space-x-4">
+<select class="text-xs border-none bg-transparent font-medium focus:ring-0 text-on-surface cursor-pointer">
+<option>Status: All</option>
+<option>Approved</option>
+<option>Rejected</option>
+<option>Pending</option>
+</select>
+<select class="text-xs border-none bg-transparent font-medium focus:ring-0 text-on-surface cursor-pointer">
+<option>Confidence: High</option>
+<option>Medium</option>
+<option>Low</option>
+</select>
+</div>
+<div class="flex items-center space-x-2 text-xs font-medium text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">sort</span>
+<span>Sort by: Confidence</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl ghost-border soft-shadow overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">
+<tr>
+<th class="px-6 py-4">Claim ID</th>
+<th class="px-6 py-4">Status</th>
+<th class="px-6 py-4">Confidence</th>
+<th class="px-6 py-4">Key Reason</th>
+<th class="px-6 py-4 text-right">Stage Failed</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<td class="px-6 py-4 font-bold text-on-surface">#CL-88210</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold">APPROVED</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-secondary">0.98</span>
+<div class="w-12 bg-surface-container rounded-full h-1.5">
+<div class="bg-secondary h-full rounded-full" style="width: 98%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant italic">Clear evidence matching...</td>
+<td class="px-6 py-4 text-right text-xs font-medium text-on-surface-variant">—</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<td class="px-6 py-4 font-bold text-on-surface">#CL-88211</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-bold uppercase">Rejected</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-error">0.42</span>
+<div class="w-12 bg-surface-container rounded-full h-1.5">
+<div class="bg-error h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant italic">ICD-10 mismatch found</td>
+<td class="px-6 py-4 text-right text-xs font-bold text-error uppercase">Document Validation</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<td class="px-6 py-4 font-bold text-on-surface">#CL-88212</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-surface-container text-on-surface-variant text-[10px] font-bold uppercase">Pending</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-tertiary">0.71</span>
+<div class="w-12 bg-surface-container rounded-full h-1.5">
+<div class="bg-tertiary h-full rounded-full" style="width: 71%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant italic">Awaiting physician note...</td>
+<td class="px-6 py-4 text-right text-xs font-bold text-tertiary uppercase">Clinical Analysis</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<td class="px-6 py-4 font-bold text-on-surface">#CL-88213</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-secondary-container text-on-secondary-container text-[10px] font-bold">APPROVED</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-secondary">0.91</span>
+<div class="w-12 bg-surface-container rounded-full h-1.5">
+<div class="bg-secondary h-full rounded-full" style="width: 91%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant italic">Verified coverage depth</td>
+<td class="px-6 py-4 text-right text-xs font-medium text-on-surface-variant">—</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors duration-150 cursor-pointer">
+<td class="px-6 py-4 font-bold text-on-surface">#CL-88214</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded bg-error-container text-on-error-container text-[10px] font-bold uppercase">Rejected</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-error">0.55</span>
+<div class="w-12 bg-surface-container rounded-full h-1.5">
+<div class="bg-error h-full rounded-full" style="width: 55%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-xs text-on-surface-variant italic">Multiple duplicate entries</td>
+<td class="px-6 py-4 text-right text-xs font-bold text-error uppercase">Fraud Flags</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex justify-between items-center text-xs text-on-surface-variant pt-2">
+<span>Showing 5 of 24 claims in batch</span>
+<div class="flex space-x-2">
+<button class="px-3 py-1 bg-surface-container rounded font-medium hover:bg-surface-container-high transition-colors">Previous</button>
+<button class="px-3 py-1 bg-surface-container rounded font-medium hover:bg-surface-container-high transition-colors">Next</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- SideNavBar Logic - Excluded for Dashboard focus as per Shell Visibility Rule -->
+</body></html>

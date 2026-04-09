@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System Reliability &amp; Trust Dashboard | ClaimTrace AI</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#ed871e",
+                        "surface-container-highest": "#dbe4e7",
+                        "tertiary": "#914d00",
+                        "tertiary-fixed": "#fe932c",
+                        "on-surface-variant": "#586064",
+                        "on-primary-fixed": "#383f50",
+                        "on-tertiary-container": "#4a2500",
+                        "surface-container": "#eaeff1",
+                        "on-error-container": "#752121",
+                        "outline": "#737c7f",
+                        "secondary-fixed-dim": "#72ebb3",
+                        "tertiary-container": "#fe932c",
+                        "inverse-on-surface": "#9b9d9e",
+                        "on-tertiary-fixed": "#240f00",
+                        "secondary-container": "#81f9c1",
+                        "primary-container": "#dce2f7",
+                        "error": "#9f403d",
+                        "tertiary-dim": "#804300",
+                        "on-secondary-fixed": "#004930",
+                        "on-tertiary": "#fff7f4",
+                        "on-secondary": "#e6ffee",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#fff7f6",
+                        "primary": "#575e70",
+                        "error-dim": "#4e0309",
+                        "surface-container-low": "#f1f4f6",
+                        "on-primary": "#f7f7ff",
+                        "primary-fixed-dim": "#ced4e9",
+                        "error-container": "#fe8983",
+                        "on-tertiary-fixed-variant": "#572c00",
+                        "surface-tint": "#575e70",
+                        "primary-dim": "#4b5264",
+                        "outline-variant": "#abb3b7",
+                        "surface": "#f8f9fa",
+                        "on-background": "#2b3437",
+                        "primary-fixed": "#dce2f7",
+                        "inverse-surface": "#0c0f10",
+                        "background": "#f8f9fa",
+                        "secondary-dim": "#005f40",
+                        "on-surface": "#2b3437",
+                        "on-secondary-container": "#005e3f",
+                        "on-primary-fixed-variant": "#545b6d",
+                        "on-primary-container": "#4b5263",
+                        "secondary-fixed": "#81f9c1",
+                        "inverse-primary": "#d9dff5",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container-high": "#e2e9ec",
+                        "surface-dim": "#d1dce0",
+                        "secondary": "#006d4a",
+                        "surface-variant": "#dbe4e7",
+                        "on-secondary-fixed-variant": "#006947"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["JetBrains Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+        .clinical-shadow {
+            box-shadow: 0 12px 24px -4px rgba(43, 52, 55, 0.06);
+        }
+        .ghost-border {
+            border: 0.5px solid rgba(171, 179, 183, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-gray-50/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-slate-800">
+<nav class="flex justify-between items-center px-6 h-16 max-w-full mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-lg font-bold text-slate-900 dark:text-white tracking-tight">ClaimTrace AI</span>
+<div class="hidden md:flex items-center gap-6 h-full font-inter text-sm font-medium">
+<a class="text-slate-500 dark:text-slate-400 pb-4 mt-4 hover:text-blue-600 dark:hover:text-blue-300 transition-colors cursor-pointer active:opacity-70 transition-all" href="/#/claims" target="_top">Claims</a>
+<a class="text-slate-500 dark:text-slate-400 pb-4 mt-4 hover:text-blue-600 dark:hover:text-blue-300 transition-colors cursor-pointer active:opacity-70 transition-all" href="/#/audit-log" target="_top">Audit Log</a>
+<a class="text-slate-500 dark:text-slate-400 pb-4 mt-4 hover:text-blue-600 dark:hover:text-blue-300 transition-colors cursor-pointer active:opacity-70 transition-all" href="/#/batch" target="_top">Batch</a>
+<a class="text-blue-700 dark:text-blue-400 border-b-2 border-blue-700 dark:border-blue-400 pb-4 mt-4 cursor-pointer active:opacity-70 transition-all" href="/#/system" target="_top">System</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="bg-primary-container text-on-primary-container px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">Claim Counter: 1,284</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="account_circle">account_circle</span>
+</div>
+</nav>
+</header>
+<main class="pt-24 pb-12 px-6 max-w-7xl mx-auto space-y-6">
+<!-- Row 1: System Health Metrics -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Consistency Score -->
+<div class="bg-surface-container-lowest p-5 rounded-xl ghost-border clinical-shadow">
+<p class="text-on-surface-variant text-xs font-medium uppercase tracking-tight mb-1">Consistency Score</p>
+<div class="flex items-end gap-2">
+<h3 class="text-2xl font-bold text-on-surface leading-none">96%</h3>
+<span class="text-secondary text-xs font-semibold mb-0.5 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span> 0.4%
+                    </span>
+</div>
+<p class="text-on-surface-variant text-[11px] mt-2 italic">Decision vs Audit alignment</p>
+</div>
+<!-- Avg Confidence -->
+<div class="bg-surface-container-lowest p-5 rounded-xl ghost-border clinical-shadow">
+<p class="text-on-surface-variant text-xs font-medium uppercase tracking-tight mb-1">Avg Confidence</p>
+<div class="flex items-end gap-2">
+<h3 class="text-2xl font-bold text-on-surface leading-none">0.87</h3>
+<span class="text-secondary text-xs font-semibold mb-0.5 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span> Stable
+                    </span>
+</div>
+<p class="text-on-surface-variant text-[11px] mt-2 italic">Across all stages</p>
+</div>
+<!-- Low Confidence Cases -->
+<div class="bg-surface-container-lowest p-5 rounded-xl ghost-border clinical-shadow">
+<p class="text-on-surface-variant text-xs font-medium uppercase tracking-tight mb-1">Low Confidence Cases</p>
+<div class="flex items-end gap-2">
+<h3 class="text-2xl font-bold text-error leading-none">14</h3>
+<span class="text-error text-xs font-semibold mb-0.5 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="warning">warning</span> +2
+                    </span>
+</div>
+<p class="text-on-surface-variant text-[11px] mt-2 italic">Requires human review</p>
+</div>
+<!-- Fraud Flag Rate -->
+<div class="bg-surface-container-lowest p-5 rounded-xl ghost-border clinical-shadow">
+<p class="text-on-surface-variant text-xs font-medium uppercase tracking-tight mb-1">Fraud Flag Rate</p>
+<div class="flex items-end gap-2">
+<h3 class="text-2xl font-bold text-on-surface leading-none">4.2%</h3>
+<span class="text-tertiary text-xs font-semibold mb-0.5 flex items-center">
+<span class="material-symbols-outlined text-sm" data-icon="query_stats">query_stats</span> Normal
+                    </span>
+</div>
+<p class="text-on-surface-variant text-[11px] mt-2 italic">Risk detection rate</p>
+</div>
+</div>
+<!-- Row 2: Validation & Risk Analytics -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Donut Chart: Consistency -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+<h4 class="text-sm font-semibold text-on-surface-variant mb-6 uppercase tracking-wider">Consistency Distribution</h4>
+<div class="relative w-40 h-40 mx-auto">
+<!-- SVG Donut Representation -->
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="none" r="16" stroke="#F1F4F6" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="none" r="16" stroke="#006D4A" stroke-dasharray="96, 100" stroke-linecap="round" stroke-width="3"></circle>
+<circle cx="18" cy="18" fill="none" r="16" stroke="#9F403D" stroke-dasharray="4, 100" stroke-dashoffset="-96" stroke-linecap="round" stroke-width="3"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-2xl font-bold">96%</span>
+<span class="text-[10px] uppercase text-on-surface-variant">Aligned</span>
+</div>
+</div>
+<div class="mt-6 flex justify-between text-xs px-2">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant">Consistent (96%)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-error"></span>
+<span class="text-on-surface-variant">Inconsistent (4%)</span>
+</div>
+</div>
+</div>
+<!-- Line Chart: Confidence Trend -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 lg:col-span-1">
+<h4 class="text-sm font-semibold text-on-surface-variant mb-6 uppercase tracking-wider">Confidence Trend (7D)</h4>
+<div class="h-40 flex items-end justify-between gap-1">
+<!-- Simple visualization of a line chart trend using divs -->
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors rounded-t h-[80%] relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 hidden group-hover:block bg-on-surface text-surface px-1.5 py-0.5 rounded text-[10px]">0.82</div>
+</div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors rounded-t h-[85%] relative group"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors rounded-t h-[78%] relative group"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors rounded-t h-[82%] relative group"></div>
+<div class="flex-1 bg-primary/20 hover:bg-primary/40 transition-colors rounded-t h-[88%] relative group"></div>
+<div class="flex-1 bg-primary/30 hover:bg-primary/50 transition-colors rounded-t h-[92%] relative group"></div>
+<div class="flex-1 bg-primary-container hover:bg-primary transition-colors rounded-t h-[95%] relative group"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] text-on-surface-variant font-mono uppercase">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</div>
+<!-- Bar Chart: Distribution Across Stages -->
+<div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10">
+<h4 class="text-sm font-semibold text-on-surface-variant mb-6 uppercase tracking-wider">Low Confidence by Stage</h4>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-[11px] mb-1">
+<span class="text-on-surface-variant font-medium">Claim Analysis</span>
+<span class="font-bold">2</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 15%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[11px] mb-1">
+<span class="text-on-surface-variant font-medium">Coverage Validation</span>
+<span class="font-bold">6</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 45%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[11px] mb-1">
+<span class="text-on-surface-variant font-medium">Document Validation</span>
+<span class="font-bold">4</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full" style="width: 30%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-[11px] mb-1">
+<span class="text-on-surface-variant font-medium">Fraud Check</span>
+<span class="font-bold">2</span>
+</div>
+<div class="w-full bg-surface-container-highest h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 15%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Row 3: Alerts + Validation Table -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+<!-- Left: System Alerts Panel -->
+<div class="lg:col-span-1 space-y-4">
+<div class="bg-surface-container-lowest rounded-xl ghost-border p-6 clinical-shadow">
+<h4 class="text-sm font-bold text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary" data-icon="notifications_active">notifications_active</span>
+                        Critical System Alerts
+                    </h4>
+<div class="space-y-3">
+<div class="flex items-start gap-3 p-3 rounded-lg bg-error/5 border-l-4 border-error">
+<span class="material-symbols-outlined text-error text-lg" data-icon="error">error</span>
+<div>
+<p class="text-xs font-bold text-error">Conflicting Stage Outputs</p>
+<p class="text-[11px] text-on-surface-variant mt-1">3 claims have conflicting stage outputs. Automatic finalization paused.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 rounded-lg bg-tertiary/5 border-l-4 border-tertiary">
+<span class="material-symbols-outlined text-tertiary text-lg" data-icon="warning">warning</span>
+<div>
+<p class="text-xs font-bold text-tertiary">High Fraud Risk Cluster</p>
+<p class="text-[11px] text-on-surface-variant mt-1">Unusual pattern detected in Zip Code 90210. 8 flags in last 2 hours.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 p-3 rounded-lg bg-primary/5 border-l-4 border-primary">
+<span class="material-symbols-outlined text-primary text-lg" data-icon="info">info</span>
+<div>
+<p class="text-xs font-bold text-primary">System Latency Warning</p>
+<p class="text-[11px] text-on-surface-variant mt-1">Batch processing time increased by 12% in the last hour.</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-outline-variant text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:bg-surface-container-low transition-colors rounded-lg">
+                        View All Alerts
+                    </button>
+</div>
+<!-- Rules Panel (Sidebar content moved here) -->
+<div class="bg-surface-container-low p-5 rounded-xl ghost-border">
+<h5 class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-3">Validation Logic</h5>
+<div class="space-y-4">
+<div>
+<p class="text-[11px] font-semibold text-on-surface mb-2">Confidence Tiers</p>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-lowest p-2 rounded text-center">
+<p class="text-[9px] text-secondary font-bold uppercase">High</p>
+<p class="text-[10px] font-mono">≥0.80</p>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded text-center">
+<p class="text-[9px] text-tertiary font-bold uppercase">Med</p>
+<p class="text-[10px] font-mono">.65-.79</p>
+</div>
+<div class="bg-surface-container-lowest p-2 rounded text-center">
+<p class="text-[9px] text-error font-bold uppercase">Low</p>
+<p class="text-[10px] font-mono">&lt;0.65</p>
+</div>
+</div>
+</div>
+<div class="pt-2 border-t border-outline-variant/20">
+<p class="text-[11px] font-semibold text-on-surface mb-1">Consistency Rule</p>
+<p class="text-[10px] text-on-surface-variant leading-relaxed italic">"Final decision must align with all stage outputs to pass auto-validation."</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Validation Table -->
+<div class="lg:col-span-2">
+<div class="bg-surface-container-lowest rounded-xl ghost-border clinical-shadow overflow-hidden">
+<div class="px-6 py-4 flex justify-between items-center border-b border-outline-variant/10">
+<h4 class="text-sm font-bold text-on-surface">Recent Validation Stream</h4>
+<div class="flex gap-2">
+<span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-medium text-on-surface-variant border border-outline-variant/20">All Sources</span>
+<span class="px-2 py-1 bg-surface-container-low rounded text-[10px] font-medium text-on-surface-variant border border-outline-variant/20">Live Sync: Active</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Claim ID</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Final Status</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Confidence</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider text-center">Consist.</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Risk Level</th>
+<th class="px-6 py-3 text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Primary Issue</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4 font-mono text-xs font-medium text-primary">CLM-77293-HB</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold">Approved</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono">0.92</span>
+<div class="w-12 h-1 bg-surface-container-highest rounded-full">
+<div class="bg-secondary h-full" style="width: 92%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] font-bold text-secondary uppercase">Low</span>
+</td>
+<td class="px-6 py-4 text-[11px] text-on-surface-variant">None</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4 font-mono text-xs font-medium text-primary">CLM-8412-TP</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-error-container/30 text-on-error-container text-[10px] font-bold">Rejected</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono text-error">0.54</span>
+<div class="w-12 h-1 bg-surface-container-highest rounded-full">
+<div class="bg-error h-full" style="width: 54%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="material-symbols-outlined text-error text-sm" data-icon="warning">warning</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] font-bold text-error uppercase">High</span>
+</td>
+<td class="px-6 py-4 text-[11px] text-on-surface-variant italic">Coverage contradiction detected</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4 font-mono text-xs font-medium text-primary">CLM-91220-RX</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/30 text-on-tertiary-container text-[10px] font-bold">Pending</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono">0.71</span>
+<div class="w-12 h-1 bg-surface-container-highest rounded-full">
+<div class="bg-tertiary h-full" style="width: 71%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] font-bold text-tertiary uppercase">Medium</span>
+</td>
+<td class="px-6 py-4 text-[11px] text-on-surface-variant">Manual ID Check required</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4 font-mono text-xs font-medium text-primary">CLM-10332-SD</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/30 text-on-secondary-container text-[10px] font-bold">Approved</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono">0.89</span>
+<div class="w-12 h-1 bg-surface-container-highest rounded-full">
+<div class="bg-secondary h-full" style="width: 89%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="check_circle">check_circle</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] font-bold text-secondary uppercase">Low</span>
+</td>
+<td class="px-6 py-4 text-[11px] text-on-surface-variant">None</td>
+</tr>
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4 font-mono text-xs font-medium text-primary">CLM-55210-WE</td>
+<td class="px-6 py-4">
+<span class="px-2 py-0.5 rounded-full bg-error-container/30 text-on-error-container text-[10px] font-bold">Flagged</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono text-error">0.42</span>
+<div class="w-12 h-1 bg-surface-container-highest rounded-full">
+<div class="bg-error h-full" style="width: 42%"></div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<span class="material-symbols-outlined text-error text-sm" data-icon="report">report</span>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] font-bold text-error uppercase">Critical</span>
+</td>
+<td class="px-6 py-4 text-[11px] text-on-surface-variant italic">Multiple provider identity flags</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-3 bg-surface-container-low/50 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+<span>Showing 1-5 of 1,284 results</span>
+<div class="flex gap-4">
+<button class="hover:text-primary transition-colors">Previous</button>
+<button class="hover:text-primary transition-colors">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- System Source Inspector (Design System Signature Component) -->
+<div class="bg-surface-dim rounded-xl p-6 ghost-border">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="terminal">terminal</span>
+<span class="text-[11px] font-bold uppercase tracking-widest text-on-surface-variant">System Trust Payload</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-[10px] font-mono text-on-surface-variant">NODE_04_STATUS: HEALTHY</span>
+</div>
+</div>
+<pre class="font-mono text-[11px] leading-relaxed text-on-surface overflow-x-auto p-4 bg-surface-container-lowest/50 rounded-lg">{
+  <span class="text-secondary">"system_integrity"</span>: <span class="text-on-surface">true</span>,
+  <span class="text-secondary">"audit_alignment_score"</span>: <span class="text-on-surface">0.9624</span>,
+  <span class="text-secondary">"validation_engine"</span>: {
+    <span class="text-secondary">"active_rules"</span>: 142,
+    <span class="text-secondary">"consensus_threshold"</span>: 0.85,
+    <span class="text-secondary">"anomalies_detected"</span>: <span class="text-tertiary">14</span>
+  },
+  <span class="text-secondary">"last_sync"</span>: <span class="text-on-surface">"2023-10-27T14:22:01.004Z"</span>,
+  <span class="text-secondary">"security_hash"</span>: <span class="text-on-surface">"8f2e...9a1c"</span>
+}</pre>
+</div>
+</main>
+<footer class="mt-12 mb-8 text-center text-on-surface-variant text-[10px] uppercase tracking-[0.2em] font-medium">
+        ClaimTrace AI System Reliability Module • Confidentiality Level 4 • © 2023
+    </footer>
+</body></html>

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuditCare | Audit Log Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+            font-size: 20px;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        .tonal-layering-no-borders { border: none !important; }
+        /* Custom scrollbar for clinical look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E2E9EC; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ABB3B7; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#006d4a",
+                        "secondary-container": "#81f9c1",
+                        "surface-variant": "#dbe4e7",
+                        "primary-container": "#dce2f7",
+                        "outline-variant": "#abb3b7",
+                        "on-background": "#2b3437",
+                        "on-surface": "#2b3437",
+                        "inverse-surface": "#0c0f10",
+                        "primary-dim": "#4b5264",
+                        "background": "#f8f9fa",
+                        "surface-container-low": "#f1f4f6",
+                        "surface-bright": "#f8f9fa",
+                        "surface-container-high": "#e2e9ec",
+                        "on-primary-fixed-variant": "#545b6d",
+                        "on-tertiary-fixed-variant": "#572c00",
+                        "surface-container": "#eaeff1",
+                        "on-tertiary-fixed": "#240f00",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#72ebb3",
+                        "on-secondary-container": "#005e3f",
+                        "on-tertiary": "#fff7f4",
+                        "inverse-on-surface": "#9b9d9e",
+                        "surface-container-highest": "#dbe4e7",
+                        "tertiary-container": "#fe932c",
+                        "on-surface-variant": "#586064",
+                        "surface-dim": "#d1dce0",
+                        "on-error": "#fff7f6",
+                        "tertiary-fixed": "#fe932c",
+                        "error-container": "#fe8983",
+                        "primary-fixed-dim": "#ced4e9",
+                        "secondary-fixed": "#81f9c1",
+                        "primary": "#575e70",
+                        "outline": "#737c7f",
+                        "on-secondary-fixed": "#004930",
+                        "on-secondary": "#e6ffee",
+                        "primary-fixed": "#dce2f7",
+                        "on-primary-fixed": "#383f50",
+                        "secondary-dim": "#005f40",
+                        "on-tertiary-container": "#4a2500",
+                        "tertiary-fixed-dim": "#ed871e",
+                        "on-primary": "#f7f7ff",
+                        "on-secondary-fixed-variant": "#006947",
+                        "error-dim": "#4e0309",
+                        "tertiary-dim": "#804300",
+                        "tertiary": "#914d00",
+                        "surface-tint": "#575e70",
+                        "surface": "#f8f9fa",
+                        "error": "#9f403d",
+                        "on-primary-container": "#4b5263",
+                        "inverse-primary": "#d9dff5",
+                        "on-error-container": "#752121"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md shadow-sm h-14 flex items-center justify-between px-6">
+<div class="flex items-center gap-8">
+<span class="text-lg font-semibold tracking-tighter text-gray-900">AuditCare</span>
+<nav class="flex items-center gap-6">
+<a class="text-gray-500 hover:text-gray-700 font-sans text-sm tracking-tight transition-colors duration-150" href="/#/claims" target="_top">Claims</a>
+<a class="text-gray-900 font-medium border-b-2 border-blue-600 pb-1 font-sans text-sm tracking-tight" href="/#/audit-log" target="_top">Audit Log</a>
+<a class="text-gray-500 hover:text-gray-700 font-sans text-sm tracking-tight transition-colors duration-150" href="/#/batch" target="_top">Batch</a>
+<a class="text-gray-500 hover:text-gray-700 font-sans text-sm tracking-tight transition-colors duration-150" href="/#/system" target="_top">System</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant scale-90">search</span>
+<input class="bg-surface-container-low border-none rounded-lg py-1.5 pl-10 pr-4 text-xs w-64 focus:ring-1 focus:ring-primary" placeholder="Search audit trails..." type="text"/>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:bg-gray-50 rounded-full transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-1.5 text-on-surface-variant hover:bg-gray-50 rounded-full transition-colors"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</header>
+<main class="pt-14 h-screen flex">
+<!-- Left Panel: Claim List (30%) -->
+<aside class="w-[30%] border-r border-outline-variant/20 flex flex-col bg-surface-container-lowest">
+<!-- Filter Bar -->
+<div class="p-4 border-b border-outline-variant/10 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<h2 class="text-sm font-semibold text-on-surface">Claims Records</h2>
+<div class="flex gap-2">
+<span class="text-[10px] font-medium text-secondary flex items-center gap-1 bg-secondary-container/30 px-2 py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> High
+                        </span>
+<span class="text-[10px] font-medium text-tertiary flex items-center gap-1 bg-tertiary-container/20 px-2 py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Med
+                        </span>
+<span class="text-[10px] font-medium text-error flex items-center gap-1 bg-error-container/20 px-2 py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> Low
+                        </span>
+</div>
+</div>
+<div class="flex gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline-variant text-sm">search</span>
+<input class="w-full text-xs border-outline-variant/30 rounded py-1 pl-7 bg-surface-container-low focus:border-primary" placeholder="Claim ID..." type="text"/>
+</div>
+<select class="text-xs border-outline-variant/30 rounded py-1 bg-surface-container-low focus:border-primary">
+<option>All Status</option>
+<option>Approved</option>
+<option>Rejected</option>
+<option>Pending</option>
+</select>
+</div>
+</div>
+<!-- Scrollable List -->
+<div class="flex-1 overflow-y-auto">
+<!-- Active Claim -->
+<div class="p-4 bg-primary-container/20 border-l-4 border-primary cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-on-surface tracking-tight">CLM-9283-XJ</span>
+<span class="text-[10px] px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded font-medium uppercase tracking-wider">Approved</span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-mono text-secondary">0.98 Confidence</span>
+<span class="text-[10px] text-on-surface-variant">• 2m ago</span>
+</div>
+<p class="text-[11px] text-on-surface-variant line-clamp-1 leading-relaxed">Clinical notes match ICD-10 diagnostic codes for respiratory infection...</p>
+</div>
+<!-- List Items -->
+<div class="p-4 border-b border-outline-variant/10 hover:bg-surface-container-low cursor-pointer transition-colors group">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-on-surface tracking-tight">CLM-8412-TP</span>
+<span class="text-[10px] px-2 py-0.5 bg-error-container/20 text-error rounded font-medium uppercase tracking-wider">Rejected</span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-mono text-tertiary">0.64 Confidence</span>
+<span class="text-[10px] text-on-surface-variant">• 15m ago</span>
+</div>
+<p class="text-[11px] text-on-surface-variant line-clamp-1 leading-relaxed">Possible duplicate service detected for provider NPI 122849...</p>
+</div>
+<div class="p-4 border-b border-outline-variant/10 hover:bg-surface-container-low cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-on-surface tracking-tight">CLM-7231-LM</span>
+<span class="text-[10px] px-2 py-0.5 bg-surface-container-high text-on-surface-variant rounded font-medium uppercase tracking-wider">Pending</span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-mono text-secondary">0.92 Confidence</span>
+<span class="text-[10px] text-on-surface-variant">• 1h ago</span>
+</div>
+<p class="text-[11px] text-on-surface-variant line-clamp-1 leading-relaxed">Coverage validation complete. Awaiting senior medical reviewer sign-off.</p>
+</div>
+<div class="p-4 border-b border-outline-variant/10 hover:bg-surface-container-low cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-on-surface tracking-tight">CLM-4490-WR</span>
+<span class="text-[10px] px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded font-medium uppercase tracking-wider">Approved</span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-mono text-secondary">0.99 Confidence</span>
+<span class="text-[10px] text-on-surface-variant">• 3h ago</span>
+</div>
+<p class="text-[11px] text-on-surface-variant line-clamp-1 leading-relaxed">Standard pediatric wellness exam. Fully compliant with policy G-42.</p>
+</div>
+<div class="p-4 border-b border-outline-variant/10 hover:bg-surface-container-low cursor-pointer transition-colors">
+<div class="flex justify-between items-start mb-1">
+<span class="text-xs font-bold text-on-surface tracking-tight">CLM-1102-AQ</span>
+<span class="text-[10px] px-2 py-0.5 bg-error-container/20 text-error rounded font-medium uppercase tracking-wider">Rejected</span>
+</div>
+<div class="flex items-center gap-2 mb-2">
+<span class="text-[10px] font-mono text-error">0.31 Confidence</span>
+<span class="text-[10px] text-on-surface-variant">• 5h ago</span>
+</div>
+<p class="text-[11px] text-on-surface-variant line-clamp-1 leading-relaxed">Multiple inconsistencies in laboratory results and treatment dates.</p>
+</div>
+</div>
+</aside>
+<!-- Right Panel: Audit Detail (70%) -->
+<section class="flex-1 bg-surface-container-low overflow-y-auto p-8">
+<div class="max-w-5xl mx-auto space-y-6">
+<!-- Section 1: Summary Card -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant/15 flex justify-between items-start">
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<span class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant bg-surface-container-high px-2 py-1 rounded">Claim Summary</span>
+<h1 class="text-2xl font-bold tracking-tight text-on-surface">CLM-9283-XJ</h1>
+</div>
+<div>
+<p class="text-xs font-medium text-on-surface-variant mb-1 uppercase tracking-tighter">Final Audit Decision</p>
+<p class="text-sm text-on-surface leading-relaxed max-w-lg">Claim approved based on consistent clinical evidence across all audit stages. Diagnostic code J01.90 aligns with treatment protocol and patient history records retrieved from Central Network.</p>
+</div>
+</div>
+<div class="text-right flex flex-col items-end gap-3">
+<span class="px-4 py-1.5 bg-secondary text-on-secondary rounded-full font-bold text-sm shadow-sm">PAYMENT AUTHORIZED</span>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-bold text-secondary uppercase">Audit Confidence Score</span>
+<span class="text-3xl font-mono font-bold text-secondary">0.98</span>
+</div>
+</div>
+</div>
+<!-- Section 2: 5-Stage Pipeline -->
+<div class="space-y-4">
+<h3 class="text-sm font-bold text-on-surface-variant uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined">analytics</span> Audit Stage Logic
+                    </h3>
+<div class="space-y-4 relative">
+<!-- Line connecting stages -->
+<div class="absolute left-6 top-8 bottom-8 w-px bg-outline-variant/20 z-0"></div>
+<!-- Stage 1 -->
+<div class="relative z-10 flex gap-6 bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-lg shrink-0">1</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="col-span-2">
+<h4 class="text-sm font-bold text-on-surface mb-1">Claim Analysis</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Initial parsing of medical billing codes and provider identifiers. Verified 12 distinct data points.</p>
+</div>
+<div class="flex flex-col items-end justify-center gap-2">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase">0.99 Confidence</span>
+<span class="text-[10px] text-outline italic">Source: OCR Engine v4</span>
+</div>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="relative z-10 flex gap-6 bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-lg shrink-0">2</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="col-span-2">
+<h4 class="text-sm font-bold text-on-surface mb-1">Coverage Validation</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Cross-referenced against Policy #AX-9002 benefits table. Member is eligible for specialized respiratory care.</p>
+</div>
+<div class="flex flex-col items-end justify-center gap-2">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase">1.00 Confidence</span>
+<span class="text-[10px] text-outline italic">Source: Policy DB</span>
+</div>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="relative z-10 flex gap-6 bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-lg shrink-0">3</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="col-span-2">
+<h4 class="text-sm font-bold text-on-surface mb-1">Document Validation</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">NLP analysis of physician notes. Confirmed symptoms (fever, congestion) match diagnostic code J01.90.</p>
+</div>
+<div class="flex flex-col items-end justify-center gap-2">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase">0.96 Confidence</span>
+<span class="text-[10px] text-outline italic">Source: Bio-Med NLP</span>
+</div>
+</div>
+</div>
+<!-- Stage 4 -->
+<div class="relative z-10 flex gap-6 bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-lg shrink-0">4</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="col-span-2">
+<h4 class="text-sm font-bold text-on-surface mb-1">Fraud Check</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Analyzed provider billing patterns. No anomalies found. Claim density within 1 standard deviation for region.</p>
+</div>
+<div class="flex flex-col items-end justify-center gap-2">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase">0.94 Confidence</span>
+<span class="text-[10px] text-outline italic">Source: Fraud-Guard AI</span>
+</div>
+</div>
+</div>
+<!-- Stage 5 -->
+<div class="relative z-10 flex gap-6 bg-surface-container-lowest p-4 rounded-lg border border-outline-variant/10">
+<div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-lg shrink-0">5</div>
+<div class="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="col-span-2">
+<h4 class="text-sm font-bold text-on-surface mb-1">Decision Generation</h4>
+<p class="text-xs text-on-surface-variant leading-relaxed">Aggregated weighted evidence from stages 1-4. Final recommendation: Approve for full reimbursement.</p>
+</div>
+<div class="flex flex-col items-end justify-center gap-2">
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded uppercase">0.98 Confidence</span>
+<span class="text-[10px] text-outline italic">Source: Core Decision Engine</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Consistency Banner -->
+<div class="bg-secondary/5 border border-secondary/20 rounded-lg p-4 flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<p class="text-sm font-medium text-secondary">Decision consistent with all stage outputs. All clinical and administrative checks passed.</p>
+</div>
+<!-- Section 5: Why this decision was made -->
+<div class="bg-primary/5 border border-primary/10 rounded-lg p-6 space-y-3">
+<h4 class="text-xs font-bold text-primary uppercase tracking-wider">Clinical Rationale</h4>
+<p class="text-sm text-on-surface leading-relaxed italic">
+                        "The alignment between the provided clinical documentation and the ICD-10 J01.90 code (Acute sinusitis, unspecified) is robust. The patient exhibited classic symptoms documented by Dr. Sarah Miller on 2023-11-15. Treatment costs ($412.00) align exactly with the predefined fee schedule for outpatient urgent care under the member's AX-9002 plan. No conflicting claims for the same service date were identified."
+                    </p>
+</div>
+<!-- Section 4: JSON Audit Log -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-bold text-on-surface-variant uppercase tracking-widest">Raw Audit Logs (JSON)</h3>
+<div class="flex gap-2">
+<button class="flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest border border-outline-variant/30 text-[10px] font-bold rounded hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined !text-[14px]">content_copy</span> Copy
+                            </button>
+<button class="flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest border border-outline-variant/30 text-[10px] font-bold rounded hover:bg-gray-50 transition-colors">
+<span class="material-symbols-outlined !text-[14px]">ios_share</span> Export
+                            </button>
+</div>
+</div>
+<div class="bg-[#1F2937] rounded-lg p-6 mono text-[11px] text-gray-300 leading-relaxed max-h-64 overflow-y-auto shadow-inner">
+<pre>{
+  "audit_id": "9283-XJ-LOG-001",
+  "timestamp": "2023-11-15T14:22:01.332Z",
+  "claim_ref": "CLM-9283-XJ",
+  "engine_version": "v2.4.12-pro",
+  "stages": [
+    {
+      "id": "analysis",
+      "status": "COMPLETED",
+      "confidence": 0.992,
+      "parameters": ["icd_parsing", "provider_auth"]
+    },
+    {
+      "id": "coverage",
+      "status": "VALIDATED",
+      "confidence": 1.0,
+      "metadata": { "policy": "AX-9002", "deductible_met": true }
+    },
+    {
+      "id": "clinical_nlp",
+      "status": "CONSISTENT",
+      "confidence": 0.968,
+      "entities": ["fever", "congestion", "sinusitis"]
+    }
+  ],
+  "final_determination": "AUTHORIZED"
+}</pre>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

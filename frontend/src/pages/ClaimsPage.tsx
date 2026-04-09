@@ -7,6 +7,7 @@ import { DecisionBanner } from '../components/result/DecisionBanner';
 import { AuditLogPanel } from '../components/result/AuditLogPanel';
 import { ConfidenceLegend } from '../components/result/ConfidenceLegend';
 import { BatchTable } from '../components/table/BatchTable';
+import { ProgressIndicator } from '../components/pipeline/ProgressIndicator';
 
 const STAGE_ORDER = ["claim_analysis", "coverage_check", "document_check", "fraud_check", "decision"];
 const STAGE_LABELS: Record<string, string> = {
@@ -26,7 +27,15 @@ const ClaimsPage: React.FC = () => {
 
       <main className="flex-1 overflow-y-auto flex flex-col bg-[#F9FAFB]">
         <div className="p-8 w-full max-w-5xl mx-auto flex-1 pb-16">
-          <ConfidenceLegend />
+          <div className="flex justify-between items-start mb-2">
+            <div>
+              <h1 className="text-2xl font-black text-gray-900 tracking-tight">Audit Dashboard</h1>
+              <p className="text-sm text-gray-500 font-medium">Real-time Claims Processing Pipeline</p>
+            </div>
+            <ConfidenceLegend />
+          </div>
+
+          <ProgressIndicator />
 
           {/* Pipeline Container */}
           <div className="space-y-3">

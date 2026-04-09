@@ -275,10 +275,10 @@ Wire the pipeline state to the visual output components — stage cards, decisio
   - [x] Static component. Displays three rows: green circle + "High ≥ 0.80", amber circle + "Medium 0.65–0.79", red circle + "Low < 0.65".
   - [x] Always visible on the results side of the layout (not hidden until results appear).
 
-- [ ] Wire `components/pipeline/ProgressIndicator.tsx`:
-  - Displays a horizontal step bar with 5 steps labelled with stage names.
-  - Active step (current in-flight stage) is highlighted. Completed steps show a checkmark. Future steps are greyed out.
-  - Visible only while `store.isProcessing` is true.
+- [x] Wire `components/pipeline/ProgressIndicator.tsx`:
+  - [x] Displays a horizontal step bar with 5 steps labelled with stage names.
+  - [x] Active step (current in-flight stage) is highlighted. Completed steps show a checkmark. Future steps are greyed out.
+  - [x] Visible only while `store.isProcessing` is true.
 
 ## Tests
 

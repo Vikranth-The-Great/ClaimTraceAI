@@ -27,25 +27,25 @@ Initialize the Next.js project, configure TypeScript, install all required depen
 
 ## Tasks
 
-- [ ] Read `docs/AGENTS.md` and `docs/PLAN.md` in full before touching any code.
-- [ ] Confirm Node.js 18+ is available (`node -v`). If not, flag to the user before proceeding.
-- [ ] Use the existing `frontend` directory as an immutable foundation (as per `AGENTS.md` override).
-- [ ] Install all required npm dependencies: `openai zustand typescript`.
-- [ ] Create `.env.local` at the project root with the following key: `OPENAI_API_KEY=your_key_here`.
-- [ ] Create `.env.example` at the project root listing all required environment variables.
-- [ ] Create the full directory structure under `frontend/`.
-- [ ] Create placeholder TypeScript files for all `lib/types/` definitions.
-- [ ] Create `lib/utils/constants.ts` and define system-wide thresholds and weights.
-- [ ] Verify server starts correctly on port 3000.
-- [ ] Create `docs/ARCHITECTURE.md`.
-- [ ] Create `README.md`.
+- [x] Read `docs/AGENTS.md` and `docs/PLAN.md` in full before touching any code.
+- [x] Confirm Node.js 18+ is available (`node -v`). If not, flag to the user before proceeding.
+- [x] Use the existing `frontend` directory as an immutable foundation (as per `AGENTS.md` override).
+- [x] Install all required npm dependencies: `openai zustand typescript`.
+- [x] Create `.env.local` at the project root with the following key: `OPENAI_API_KEY=your_key_here`.
+- [x] Create `.env.example` at the project root listing all required environment variables.
+- [x] Create the full directory structure under `frontend/`.
+- [x] Create placeholder TypeScript files for all `lib/types/` definitions.
+- [x] Create `lib/utils/constants.ts` and define system-wide thresholds and weights.
+- [x] Verify server starts correctly on port 3000.
+- [x] Create `docs/ARCHITECTURE.md`.
+- [x] Create `README.md`.
 
 ## Tests
 
-- [ ] Run `npm run dev` and confirm server starts on `http://localhost:3000`.
-- [ ] Confirm `.env.local` exists and is listed in `.gitignore`.
-- [ ] Confirm `.env.example` exists.
-- [ ] Run `npx tsc --noEmit` and confirm zero TypeScript errors.
+- [x] Run `npm run dev` and confirm server starts on `http://localhost:3000`.
+- [x] Confirm `.env.local` exists and is listed in `.gitignore`.
+- [x] Confirm `.env.example` exists.
+- [x] Run `npx tsc --noEmit` and confirm zero TypeScript errors.
 
 ## Success Criteria
 
@@ -61,37 +61,37 @@ Define all TypeScript types, hardcode the three demo claims (C1, C2, C3), implem
 
 ## Tasks
 
-- [ ] Define all TypeScript types in `lib/types/`:
+- [x] Define all TypeScript types in `lib/types/`:
   **`lib/types/claim.ts`** — export `ClaimInput` interface.
   **`lib/types/stage.ts`** — export `StageOutput` interface.
   **`lib/types/result.ts`** — export `ClaimResult` interface.
 
-- [ ] Create `data/demoClaims.ts` and define the three demo `ClaimInput` objects exactly as specified.
+- [x] Create `data/demoClaims.ts` and define the three demo `ClaimInput` objects exactly as specified.
 
-- [ ] Implement `lib/utils/confidence.ts`:
+- [x] Implement `lib/utils/confidence.ts`:
   - Export function `calculateOverallConfidence(s1: number, s2: number, s3: number, s4: number): number`.
   - Export function `getConfidenceBand(score: number): 'High' | 'Medium' | 'Low'`.
 
-- [ ] Implement `lib/services/parser.ts`:
+- [x] Implement `lib/services/parser.ts`:
   - Export function `parseStageResponse(raw: string): StageOutput | null`.
 
-- [ ] Implement `lib/validators/consistency.ts`:
+- [x] Implement `lib/validators/consistency.ts`:
   - Export function `validateConsistency(auditLog: StageOutput[], finalStatus: string): { isConsistent: boolean; issues: string[] }`.
 
-- [ ] Implement `lib/utils/format.ts`:
+- [x] Implement `lib/utils/format.ts`:
   - Export function `formatCurrency(amount: number): string`.
   - Export function `formatConfidence(score: number): string`.
   - Export function `buildFinalOutput(claim: ClaimInput, auditLog: StageOutput[], overallConfidence: number): ClaimResult`.
 
-- [ ] Write unit tests in `__tests__/confidence.test.ts`.
-- [ ] Write unit tests in `__tests__/consistency.test.ts`.
+- [x] Write unit tests in `__tests__/confidence.test.ts`.
+- [x] Write unit tests in `__tests__/consistency.test.ts`.
 
 ## Tests
 
-- [ ] Run `npx tsc --noEmit` — confirm zero TypeScript errors across all new files.
-- [ ] Run unit tests: `npm test -- --testPathPattern=confidence` — all assertions pass.
-- [ ] Run unit tests: `npm test -- --testPathPattern=consistency` — all assertions pass.
-- [ ] Manually verify: import `DEMO_CLAIMS` in a scratch file and confirm all 3 objects match the exact values in `docs/AGENTS.md`.
+- [x] Run `npx tsc --noEmit` — confirm zero TypeScript errors across all new files.
+- [x] Run unit tests: `npm test -- --testPathPattern=confidence` — all assertions pass.
+- [x] Run unit tests: `npm test -- --testPathPattern=consistency` — all assertions pass.
+- [x] Manually verify: import `DEMO_CLAIMS` in a scratch file and confirm all 3 objects match the exact values in `docs/AGENTS.md`.
 
 ## Success Criteria
 

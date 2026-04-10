@@ -6,5 +6,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     port: 3000,
+    proxy: {
+      '/api/resend': {
+        target: 'https://api.resend.com/emails',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/resend/, '')
+      }
+    }
   },
 });

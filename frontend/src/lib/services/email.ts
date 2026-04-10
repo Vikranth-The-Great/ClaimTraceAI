@@ -1,7 +1,7 @@
 import { ClaimResult } from '../types/result';
 import { StageOutput } from '../types/stage';
 
-const RESEND_API_URL = 'https://api.resend.com/emails';
+const RESEND_API_URL = '/api/resend';
 const RECIPIENT = import.meta.env.VITE_RECIPIENT_EMAIL || 'svikranth40@gmail.com';
 
 // ── Helpers ────────────────────────────────────────────────────────────────

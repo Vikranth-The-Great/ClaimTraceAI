@@ -1,5 +1,6 @@
 import { ClaimInput } from '../types/claim';
 import { StageOutput } from '../types/stage';
+import { COMPANY_MASTER_POLICY } from './policy';
 
 function formatClaimData(claim: ClaimInput): string {
   return `
@@ -19,17 +20,26 @@ function formatPriorStages(stages: StageOutput[]): string {
 
 const COMMON_INSTRUCTIONS = 'Respond ONLY with valid JSON. No preamble. No markdown fences. Use exactly this schema: { "step": string, "reason": string, "confidence": number, "source": string }';
 
+function getPolicyContext(): string {
+  return `
+=== MASTER COMPANY POLICY ===
+${COMPANY_MASTER_POLICY}
+=============================
+`;
+}
+
 export function buildStage1Prompt(claim: ClaimInput): string {
-  const data = formatClaimData(claim);
   return `
 STAGE 1: CLAIM ANALYSIS
 Task: Analyze the plausibility and internal consistency of the accident description.
 
+${getPolicyContext()}
+
 Claim Data:
-${data}
+${formatClaimData(claim)}
 
 Instructions:
-- Evaluate if the description "Hit a tree while reversing" or "Rear-ended" or "Minor scratch" logically aligns with a typical accident.
+- Evaluate if the description logically aligns with a typical accident.
 - Provide a reasoning text of at least 2 full sentences.
 - Assign a confidence score between 0.80 and 0.95.
 - Set source to "Description input".
@@ -39,104 +49,96 @@ ${COMMON_INSTRUCTIONS}
 }
 
 export function buildStage2Prompt(claim: ClaimInput, priorStages: StageOutput[]): string {
-  const data = formatClaimData(claim);
-  const prior = formatPriorStages(priorStages);
   return `
 STAGE 2: COVERAGE VALIDATION
-Task: Validate if the policy covers the damage described.
+Task: Validate if the policy covers the damage described based on the MASTER COMPANY POLICY.
 
-CRITICAL RULE:
-- Comprehensive policy COVERS own damage (e.g., hitting a tree, side-panel scratches).
-- Third-Party policy DOES NOT cover own vehicle damage (it only covers damage to others).
-- If a claim involves own damage on a Third-Party policy, it MUST be flagged for rejection.
-- DO NOT DEVIATE FROM THIS RULE UNDER ANY CIRCUMSTANCES.
+${getPolicyContext()}
 
 Claim Data:
-${data}
+${formatClaimData(claim)}
 
 Prior Stage Results:
-${prior}
+${formatPriorStages(priorStages)}
 
 Instructions:
-- Provide a reasoning text of at least 2 full sentences.
+- STRICTLY refer to Section 1 of the Policy. 
+- If the claim involves own damage on a Third-Party policy, it MUST be flagged for rejection. This is absolute.
+- Provide a reasoning text of at least 2 full sentences quoting the policy logic.
 - Assign a confidence score between 0.90 and 0.99.
-- Set source to "Policy Type rule".
+- Set source to "Master Policy - Section 1".
 
 ${COMMON_INSTRUCTIONS}
 `.trim();
 }
 
 export function buildStage3Prompt(claim: ClaimInput, priorStages: StageOutput[]): string {
-  const data = formatClaimData(claim);
-  const prior = formatPriorStages(priorStages);
   return `
 STAGE 3: DOCUMENT VALIDATION
-Task: Evaluate document completeness relative to the claim size and type.
+Task: Evaluate document completeness relative to the claim size and type based on the MASTER COMPANY POLICY.
+
+${getPolicyContext()}
 
 Claim Data:
-${data}
+${formatClaimData(claim)}
 
 Prior Stage Results:
-${prior}
+${formatPriorStages(priorStages)}
 
 Instructions:
-- If Document Status is "Missing" or "Incomplete", especially for high amounts (> INR 50,000), result in lower confidence.
-- Provide a reasoning text of at least 2 full sentences.
-- Assign a confidence score between 0.70 and 0.90.
-- Set source to "Document Status input".
+- STRICTLY refer to Section 3 of the Policy.
+- Evaluate Document Status against the Claim Amount.
+- Provide a reasoning text of at least 2 full sentences quoting the policy logic.
+- Assign a confidence score between 0.70 and 0.90. (Lower if documents are inadequate for the amount).
+- Set source to "Master Policy - Section 3".
 
 ${COMMON_INSTRUCTIONS}
 `.trim();
 }
 
 export function buildStage4Prompt(claim: ClaimInput, priorStages: StageOutput[]): string {
-  const data = formatClaimData(claim);
-  const prior = formatPriorStages(priorStages);
   return `
 STAGE 4: FRAUD / CONSISTENCY CHECK
-Task: Identify potential fraud indicators or input contradictions.
+Task: Identify potential fraud indicators or input contradictions based on the MASTER COMPANY POLICY.
 
-CRITICAL RULES:
-- If Past Claims Count > 3, flag as a high fraud risk.
-- If Claim Amount is disproportionate to damage (e.g., INR 95,000 for a "minor scratch"), flag as a fraud indicator.
-- Specifically, a claim of INR 95,000 for a described minor scratch is disproportionate.
+${getPolicyContext()}
 
 Claim Data:
-${data}
+${formatClaimData(claim)}
 
 Prior Stage Results:
-${prior}
+${formatPriorStages(priorStages)}
 
 Instructions:
-- Provide a reasoning text of at least 2 full sentences.
-- Assign a confidence score between 0.55 and 0.95. If flags are found, confidence should be < 0.65.
-- Set source to "Past Claims count + Claim Amount".
+- STRICTLY refer to Section 2 of the Policy.
+- Check Past Claims Count and Claim Amount proportionality.
+- Provide a reasoning text of at least 2 full sentences quoting the policy logic.
+- Assign a confidence score between 0.55 and 0.95. If flags (like > 3 claims or disproportionate amounts) are found, confidence should be < 0.65.
+- Set source to "Master Policy - Section 2".
 
 ${COMMON_INSTRUCTIONS}
 `.trim();
 }
 
 export function buildStage5Prompt(claim: ClaimInput, priorStages: StageOutput[]): string {
-  const data = formatClaimData(claim);
-  const prior = formatPriorStages(priorStages);
   return `
 STAGE 5: DECISION GENERATION
-Task: Aggregate all prior reasoning into a final verdict.
+Task: Aggregate all prior reasoning into a final verdict strictly following the MASTER COMPANY POLICY.
 
-DECISION RULES:
-- If Coverage Validation (Stage 2) indicated no coverage -> Status: Rejected.
-- If Fraud Check (Stage 4) found high risk (confidence < 0.65) -> Status: Rejected or Pending.
-- If any stage confidence < 0.65 -> Status: Pending (Human Review Required).
-- If all stages pass with confidence >= 0.65 -> Status: Approved.
+${getPolicyContext()}
 
 Claim Data:
-${data}
+${formatClaimData(claim)}
 
 Prior Stage Results:
-${prior}
+${formatPriorStages(priorStages)}
 
 Instructions:
-- Provide a primary reason sentence that summarizes the decision.
+- STRICTLY refer to Section 4 of the Policy (AUTOMATED DECISION MATRIX).
+- If Stage 2 indicated Coverage rejection -> Status: Rejected.
+- If Stage 4 indicated Fraud flags (confidence < 0.65) -> Status: Rejected or Pending.
+- If any stage confidence < 0.65 -> Status: Pending.
+- Provide a primary reason sentence that summarizes the decision based on Policy Rules.
 - The "result" field must be exactly one of: "Approved", "Rejected", "Pending".
 - Confidence Score should be a weighted average (S1*0.1, S2*0.4, S3*0.2, S4*0.3).
 

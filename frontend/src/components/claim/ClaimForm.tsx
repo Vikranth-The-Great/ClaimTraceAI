@@ -75,9 +75,14 @@ export const ClaimForm: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[13px] font-bold text-gray-700 mb-1.5 flex items-center gap-1">
-              <span className="material-symbols-outlined text-[16px]">description</span>
-              Incident Narrative
+            <label className="block text-[13px] font-bold text-gray-700 mb-1.5 flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px]">description</span>
+                Incident Narrative
+              </div>
+              <span className={`text-[10px] font-medium ${(formData.accidentDescription.trim() ? formData.accidentDescription.trim().split(/\s+/).length : 0) < 10 ? 'text-amber-500' : 'text-green-600'}`}>
+                {formData.accidentDescription.trim() ? formData.accidentDescription.trim().split(/\s+/).length : 0} / 10 words min
+              </span>
             </label>
             <textarea
               className={`w-full bg-[#f9fafb] border rounded-md text-[14px] px-3 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all resize-none ${errors.accidentDescription ? 'border-red-400' : 'border-gray-200'}`}
@@ -159,7 +164,7 @@ export const ClaimForm: React.FC = () => {
           <div className="pt-8 space-y-3">
             <button
               className="w-full bg-[#1A56DB] text-white h-[48px] rounded-md font-bold text-sm tracking-tight hover:bg-blue-700 transition-all shadow-md active:scale-[0.98] disabled:opacity-70 disabled:grayscale disabled:pointer-events-none flex items-center justify-center gap-2"
-              disabled={store.isProcessing}
+              disabled={store.isProcessing || (formData.accidentDescription.trim() ? formData.accidentDescription.trim().split(/\s+/).length : 0) < 10}
               onClick={handleProcess}
             >
               {store.isProcessing ? (

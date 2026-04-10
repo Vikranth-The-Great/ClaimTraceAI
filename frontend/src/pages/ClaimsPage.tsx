@@ -6,6 +6,7 @@ import { StageSkeleton } from '../components/pipeline/StageSkeleton';
 import { DecisionBanner } from '../components/result/DecisionBanner';
 import { AuditLogPanel } from '../components/result/AuditLogPanel';
 import { ConfidenceLegend } from '../components/result/ConfidenceLegend';
+import { EmailReportButton } from '../components/result/EmailReportButton';
 import { BatchTable } from '../components/table/BatchTable';
 import { ProgressIndicator } from '../components/pipeline/ProgressIndicator';
 
@@ -69,6 +70,7 @@ const ClaimsPage: React.FC = () => {
 
           <DecisionBanner />
           <AuditLogPanel />
+          <EmailReportButton />
           <BatchTable />
         </div>
       </main>

@@ -1,37 +1,47 @@
 # ClaimTrace AI — System Architecture
 
 ## Overview
-ClaimTrace AI is an explainable, audit-ready AI decision system for insurance claims. It uses a 5-stage sequential reasoning pipeline to process claims and generate a structured audit log.
+ClaimTrace AI is an explainable, audit-ready AI decision system for insurance claims. It processes claims through 5 sequential reasoning stages — producing a full, structured audit trail with confidence scores and source citations for every step.
 
 ## Tech Stack
-- **Frontend**: React (Vite)
-- **State Management**: Zustand
-- **AI**: OpenAI (GPT-4o)
-- **Styling**: Tailwind CSS / Vanilla CSS
+- **Framework**: React 18 with Vite
+- **Language**: TypeScript (Strict Mode)
+- **State Management**: Zustand with `persist` middleware (Local Storage persistence)
+- **AI Engine**: OpenAI `gpt-4o` (Temperature 0.1 for determinism)
+- **Styling**: Tailwind CSS & Vanilla CSS (Glassmorphism & Professional Audit Dashboard aesthetics)
+- **Icons**: Material Symbols Rounded
 
-## Directory Structure
-- `frontend/src/lib/pipeline`: Pipeline orchestration logic.
-- `frontend/src/lib/services`: External service wrappers (OpenAI, etc.).
-- `frontend/src/lib/types`: TypeScript definitions.
-- `frontend/src/lib/utils`: Helper functions and constants.
-- `frontend/src/store`: Zustand store for application state.
-- `frontend/src/hooks`: Custom React hooks for pipeline execution.
+## Core Modules (`frontend/src/lib/`)
+- **`pipeline/`**: Contains the orchestrator and the 5-stage logic. Each stage is a separate GPT-4o call where prior stage outputs are piped forward as context.
+- **`services/`**: Secure OpenAI API wrapper using the `openai` SDK.
+- **`validators/`**: Consistency validator that flags contradictions between AI reasoning steps and the final verdict.
+- **`utils/`**: Weighted confidence calculator and shared constants.
+- **`types/`**: Comprehensive TypeScript interfaces for claims, stages, and audit logs.
 
-## Pipeline Stages
-1. **Claim Analysis**: Plausibility check of the description.
-2. **Coverage Validation**: Hard rule check (Comprehensive vs Third-Party).
-3. **Document Validation**: Completeness check vs claim amount.
-4. **Fraud / Consistency Check**: Red flag detection (past claims, amount ratios).
-5. **Decision Generation**: Final aggregation and verdict.
+## Pipeline Reasoning Logic
+1.  **Claim Analysis (Stage 1)**: Evaluates the narrative for plausibility.
+2.  **Coverage Validation (Stage 2)**: Hard rules: `Third-Party` covers only others; `Comprehensive` covers own and others. Rejects claims violating this.
+3.  **Document Validation (Stage 3)**: Flags missing/incomplete docs, especially for claims > ₹50,000.
+4.  **Fraud Check (Stage 4)**: Flags high past claim counts (>3) and disproportionate amount-to-description ratios (e.g., ₹95k for a scratch).
+5.  **Executive Decision (Stage 5)**: The "Consensus" stage that aggregates all prior scores and logic into a final verdict.
 
-## Confidence Scoring
-Overall confidence is calculated as a weighted average:
-`(s1 * 0.10) + (s2 * 0.40) + (s3 * 0.20) + (s4 * 0.30)`
+## Analytics Intelligence Dashboard
+The `/analytics` module aggregates data from the Zustand `auditHistory`:
+- **KPI Engine**: Calculates approval rates, average confidence, and risk distributions.
+- **Data Visualization**: Decision distribution charts and per-stage confidence histograms.
+- **Audit History Tracker**: A high-density table for browsing all historical decisions.
 
-## Data Schema
-The system outputs a mandatory JSON schema containing:
-- Claim ID
-- Status (Approved/Rejected/Pending)
-- Reason
-- Confidence Score
-- Full Audit Log (sequential steps)
+## Mandatory JSON Schema (Audit Traceability)
+The system produces an audit-ready JSON payload for every decision:
+```json
+{
+  "Claim ID": "C1",
+  "Status": "Rejected",
+  "Reason": "Reason sentence",
+  "Confidence Score": 0.92,
+  "Audit Log": [
+    { "step": "claim_analysis", "reason": "...", "confidence": 0.85, "source": "Description input" },
+    ...
+  ]
+}
+```

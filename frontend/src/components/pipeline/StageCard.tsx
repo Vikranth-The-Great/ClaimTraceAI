@@ -29,7 +29,7 @@ export const StageCard: React.FC<StageCardProps> = ({ step, reason, confidence, 
   const label = STAGE_LABELS[step] ?? step;
   
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-6 animate-fade-in shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-6 animate-slide-up shadow-sm hover:shadow-md transition-shadow">
       <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
         {num}
       </div>

@@ -37,7 +37,7 @@ export const ProgressIndicator: React.FC = () => {
                 isCompleted 
                   ? "bg-blue-600 border-blue-600 text-white shadow-[0_0_12px_rgba(37,99,235,0.4)]" 
                   : isActive 
-                    ? "bg-white border-blue-600 text-blue-600 scale-110" 
+                    ? "bg-white border-blue-600 text-blue-600 scale-110 animate-pulse-highlight" 
                     : "bg-white border-gray-200 text-gray-400"
               }`}>
                 {isCompleted ? (

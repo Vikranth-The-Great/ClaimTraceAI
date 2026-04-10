@@ -22,11 +22,11 @@ const ClaimsPage: React.FC = () => {
   const { stages, isProcessing } = useClaimStore();
 
   return (
-    <div className="flex h-[calc(100vh-64px)] overflow-hidden bg-[#F9FAFB] font-sans">
+    <div className="flex w-full h-[calc(100vh-64px)] overflow-hidden bg-[#F9FAFB] font-sans">
       <ClaimForm />
 
       <main className="flex-1 overflow-y-auto flex flex-col bg-[#F9FAFB]">
-        <div className="p-8 w-full max-w-5xl mx-auto flex-1 pb-16">
+        <div className="p-8 w-full flex-1 pb-16">
           <div className="flex justify-between items-start mb-2">
             <div>
               <h1 className="text-2xl font-black text-gray-900 tracking-tight">Audit Dashboard</h1>

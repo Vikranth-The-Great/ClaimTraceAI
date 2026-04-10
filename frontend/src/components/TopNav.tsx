@@ -35,12 +35,12 @@ const TopNav: React.FC = () => {
             Audit Log
           </NavLink>
           <NavLink 
-            to="/batch" 
+            to="/analytics" 
             className={({ isActive }) => `px-4 py-2 rounded-lg text-sm font-bold transition-all ${
               isActive ? "bg-blue-50 text-blue-700" : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
             }`}
           >
-            Batch Analysis
+            Analytics
           </NavLink>
         </div>
       </div>

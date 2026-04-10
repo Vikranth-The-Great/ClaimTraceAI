@@ -38,21 +38,6 @@ export const ClaimForm: React.FC = () => {
     await processClaim(formData);
   };
 
-  const handleRunAll = async () => {
-    // Phase 5 requirement: Run All processes C1, C2, C3 sequentially
-    const { DEMO_CLAIMS } = await import('../../data/demoClaims');
-    const { runPipeline } = await import('../../lib/pipeline/orchestrator');
-    
-    for (const key of ["C1", "C2", "C3"] as const) {
-      const claim = DEMO_CLAIMS[key];
-      setFormData(claim);
-      store.setClaim(claim);
-      store.resetPipeline();
-      const result = await runPipeline(claim);
-      store.setFinalResult(result);
-      store.addToBatch(result);
-    }
-  };
 
   const updateField = (field: keyof ClaimInput, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -189,14 +174,8 @@ export const ClaimForm: React.FC = () => {
                 </>
               )}
             </button>
-            <button
-              className="w-full bg-white border border-gray-200 text-[#6B7280] h-[48px] rounded-md font-bold text-sm hover:bg-gray-50 transition-all active:scale-[0.98] disabled:opacity-50"
-              disabled={store.isProcessing}
-              onClick={handleRunAll}
-            >
-              Run Batch Analysis (C1-C3)
-            </button>
           </div>
+
 
           {store.error && (
             <div className="mt-4 p-3 bg-red-50 border border-red-100 rounded-md">

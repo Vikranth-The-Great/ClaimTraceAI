@@ -40,7 +40,7 @@ A judge or assessor can load any claim, watch the 5-stage reasoning unfold in re
 
 **7. Consistency Validator** — Client-side check confirming the final decision does not contradict stage outputs. If a contradiction is detected, a yellow warning banner appears — the output is still shown, never suppressed.
 
-**8. Batch Results Table** — After running all 3 demo claims (individually or via "Run All"), a summary table shows: Claim ID | Status badge | Overall Confidence | Key Reason.
+**8. Analytics Intelligence Dashboard** — Aggregated reporting view showing approval rates, rejected claims, and pending review counts. Features a decision distribution chart, stage confidence bars, and risk summaries derived from all-time audit history.
 
 **9. Per-Stage Loading Skeleton** — While a stage is processing, its card shows a shimmer/skeleton so the user knows the pipeline is live and working.
 
@@ -48,7 +48,8 @@ A judge or assessor can load any claim, watch the 5-stage reasoning unfold in re
 
 **11. Copy to Clipboard + Export JSON** — One-click copy of the JSON audit log and optional download as `.json` file.
 
-**12. "Run All 3 Claims" Batch Button** — Processes C1, C2, C3 sequentially and populates the batch table automatically.
+**12. Full Session Persistence (Audit Log)** — All processed claims are automatically saved to the browser's local storage (via Zustand persist) and can be reviewed, replayed, or exported from the Audit Log or Analytics tabs.
+
 
 ---
 

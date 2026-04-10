@@ -16,7 +16,7 @@ export const AuditLogPanel: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `claim-${finalResult["Claim ID"]}-audit-trail.json`;
+    a.download = `claim-${finalResult!["Claim ID"]}-audit-trail.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
